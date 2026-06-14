@@ -1,360 +1,304 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // ================= DOM ELEMENTS =================
-    const screenInvite = document.getElementById('screen-invite');
-    const screenPlanner = document.getElementById('screen-planner');
-    const screenSuccess = document.getElementById('screen-success');
-    
-    const plannerStepFood = document.getElementById('planner-step-food');
-    const plannerStepMovie = document.getElementById('planner-step-movie');
-    
-    const indicatorFood = document.getElementById('indicator-food');
-    const indicatorMovie = document.getElementById('indicator-movie');
-    const progressFill = document.getElementById('progress-fill');
-    
-    const btnYes = document.getElementById('btn-accept-yes');
-    const btnNo = document.getElementById('btn-accept-no');
-    
-    const btnFoodNext = document.getElementById('btn-food-next');
-    const btnMoviePrev = document.getElementById('btn-movie-prev');
+
+    // ===== 10 QUESTIONS =====
+    const QUESTIONS = [
+        {
+            emoji: '💖',
+            text: 'Je suis beau sur 10 ?',
+            ratingLabels: ['Bof...', 'Pas terrible', 'Moyen', 'Assez bien', 'Bien', 'Plutôt bien', 'Beau !', 'Très beau !', 'Canon !', 'Trop beau 😍'],
+        },
+        {
+            emoji: '🔥',
+            text: 'Je suis combien sur 10 au lit ?',
+            ratingLabels: ['Euh...', 'Perfectible', 'Moyen', 'Correct', 'Bien', 'Plutôt bien', 'Très bien', 'Super bien !', 'Excellent !', 'Légendaire 😏'],
+        },
+        {
+            emoji: '🍕',
+            text: 'Comment sont les dates que je prévois sur 10 ?',
+            ratingLabels: ['Raté', 'Bof', 'Moyen', 'Sympa', 'Bien', 'Bien pensé', 'Super bien !', 'Incroyable !', 'Magnifique !', 'Inoubliable 🥹'],
+        },
+        {
+            emoji: '😂',
+            text: 'Je suis drôle sur 10 (sois honnête) ?',
+            ratingLabels: ['Pas drôle du tout', 'Rarement drôle', 'Parfois drôle', 'Un peu drôle', 'Drôle', 'Assez drôle', 'Très drôle', 'Hilarant !', 'Comique né !', 'Le plus drôle du monde 😂'],
+        },
+        {
+            emoji: '🌹',
+            text: 'Je suis romantique sur 10 ?',
+            ratingLabels: ['Zéro romantisme', 'Très peu', 'Un peu', 'Parfois', 'Romantique', 'Assez romantique', 'Très romantique', 'Super romantique', 'Incroyablement romantique', 'Prince Charmant 👑'],
+        },
+        {
+            emoji: '🍳',
+            text: 'Je cuisine bien sur 10 ?',
+            ratingLabels: ['Catastrophique', 'Mauvais', 'Pas terrible', 'Basique', 'Correct', 'Bien', 'Bon cuisinier', 'Très bon !', 'Excellent chef !', 'Top Chef niveau 🌟'],
+        },
+        {
+            emoji: '🧸',
+            text: 'Je fais de bons câlins sur 10 ?',
+            ratingLabels: ['Trop bizarre', 'Pas doux', 'Moyen', 'Correct', 'Bien', 'Doux', 'Très doux !', 'Câlins magiques !', 'Trop bien !', 'Le meilleur câlineur 🥰'],
+        },
+        {
+            emoji: '👂',
+            text: 'Je t\'écoute bien sur 10 ?',
+            ratingLabels: ['Jamais', 'Rarement', 'Parfois', 'Un peu', 'Moyen', 'Plutôt bien', 'Bien', 'Très bien', 'Attentif !', 'Toujours présent 💯'],
+        },
+        {
+            emoji: '🌌',
+            text: 'Tu te projettes à combien sur 10 avec moi ?',
+            ratingLabels: ['Pas du tout', 'Peu', 'Un peu', 'Légèrement', 'Assez', 'Bien', 'Beaucoup', 'Très loin !', 'Super loin !', 'Pour toujours 💫'],
+        },
+        {
+            emoji: '🏆',
+            text: 'Au global, je suis le meilleur copain sur 10 ?',
+            ratingLabels: ['Euh...', 'Pas trop', 'Moyen', 'Pas mal', 'Bien', 'Très bien', 'Super copain !', 'Excellent copain !', 'Parfait presque', 'LE meilleur copain 🥇'],
+        },
+    ];
+
+    // Color gradient from red(1) to yellow(5) to green(10)
+    const RATING_COLORS = [
+        '#ff4d4d', '#ff6b35', '#ff8c00', '#ffb300', '#ffd700',
+        '#b8e04a', '#7ec850', '#4caf50', '#2e9e60', '#1db954',
+    ];
+
+    // ===== STATE =====
+    let currentQuestion = 0;
+    let answers = Array(QUESTIONS.length).fill(null).map(() => ({ score: null, comment: '' }));
+    let isGoingBack = false;
+
+    // ===== DOM REFS =====
+    const screenWelcome  = document.getElementById('screen-welcome');
+    const screenQuestion = document.getElementById('screen-question');
+    const screenSuccess  = document.getElementById('screen-success');
+
+    const btnStart   = document.getElementById('btn-start');
+    const btnPrev    = document.getElementById('btn-prev');
+    const btnNext    = document.getElementById('btn-next');
     const btnRestart = document.getElementById('btn-restart');
-    const btnSendEmail = document.getElementById('btn-send-email');
-    
-    const movieRadios = document.querySelectorAll('input[name="movie-choice"]');
-    const customInputContainer = document.getElementById('custom-input-container');
-    const customInputLabel = document.getElementById('custom-input-label');
-    const customInputText = document.getElementById('custom-choice-text');
-    
-    const summaryFood = document.getElementById('summary-food');
-    const summaryMovie = document.getElementById('summary-movie');
-    const dateForm = document.getElementById('date-config-form');
+    const btnEmail   = document.getElementById('btn-send-email');
 
-    // ================= FLOATING HEARTS BACKGROUND =================
+    const questionCounter  = document.getElementById('question-counter');
+    const progressFill     = document.getElementById('progress-bar-fill');
+    const questionEmoji    = document.getElementById('question-emoji');
+    const questionText     = document.getElementById('question-text');
+    const ratingGrid       = document.getElementById('rating-grid');
+    const ratingLabel      = document.getElementById('rating-label');
+    const commentInput     = document.getElementById('comment-input');
+    const resultsSummary   = document.getElementById('results-summary');
+    const averageScore     = document.getElementById('average-score');
     const heartsBackground = document.getElementById('hearts-background');
-    const heartColors = ['#ff527b', '#ff7597', '#ff8da9', '#ffb3c6', '#ffccd5'];
 
-    function createFloatingHeart() {
-        const heart = document.createElement('div');
-        heart.classList.add('floating-heart');
-        
-        const size = Math.random() * 25 + 10; // size between 10px and 35px
-        const left = Math.random() * 100;
-        const duration = Math.random() * 8 + 6;
-        const color = heartColors[Math.floor(Math.random() * heartColors.length)];
-        
-        heart.style.width = `${size}px`;
-        heart.style.height = `${size}px`;
-        heart.style.left = `${left}%`;
-        heart.style.animationDuration = `${duration}s`;
-        heart.style.backgroundColor = color;
-        
-        heartsBackground.appendChild(heart);
-        
-        setTimeout(() => {
-            heart.remove();
-        }, duration * 1000);
+    // ===== FLOATING HEARTS =====
+    const heartColors = ['#ff527b','#ff7597','#ff8da9','#ffb3c6','#ffccd5'];
+
+    function createHeart(fast = false) {
+        const h = document.createElement('div');
+        h.classList.add('floating-heart');
+        const size = Math.random() * 22 + 10;
+        const dur  = fast ? (Math.random() * 2 + 1.2) : (Math.random() * 8 + 6);
+        h.style.width  = `${size}px`;
+        h.style.height = `${size}px`;
+        h.style.left   = `${Math.random() * 100}%`;
+        h.style.animationDuration = `${dur}s`;
+        h.style.backgroundColor = heartColors[Math.floor(Math.random() * heartColors.length)];
+        heartsBackground.appendChild(h);
+        setTimeout(() => h.remove(), dur * 1000);
     }
 
-    // Spawn initial hearts
-    for (let i = 0; i < 15; i++) {
-        setTimeout(createFloatingHeart, Math.random() * 5000);
-    }
-    setInterval(createFloatingHeart, 600);
+    for (let i = 0; i < 12; i++) setTimeout(createHeart, Math.random() * 5000);
+    setInterval(createHeart, 700);
 
-    // ================= THE ESCAPING "NO" BUTTON (SMOOTH SLIDE) =================
-    function escapeButton(e) {
-        if (e) e.preventDefault();
-
-        // Switch to fixed positioning on first interaction so it can glide anywhere
-        if (!btnNo.classList.contains('btn-escape')) {
-            const rect = btnNo.getBoundingClientRect();
-            // Set current absolute screen positions first to prevent a sudden jump
-            btnNo.style.left = `${rect.left}px`;
-            btnNo.style.top = `${rect.top}px`;
-            btnNo.style.width = `${rect.width}px`;
-            btnNo.style.height = `${rect.height}px`;
-            btnNo.classList.add('btn-escape');
-            
-            // Trigger the actual escape motion slightly after class addition
-            setTimeout(() => {
-                calculateAndMove(e);
-            }, 20);
-        } else {
-            calculateAndMove(e);
-        }
+    function heartsCelebration() {
+        const end = Date.now() + 3000;
+        const iv = setInterval(() => {
+            if (Date.now() > end) return clearInterval(iv);
+            createHeart(true);
+        }, 70);
     }
 
-    function calculateAndMove(e) {
-        const padding = 40;
-        const btnWidth = btnNo.offsetWidth;
-        const btnHeight = btnNo.offsetHeight;
+    // ===== BUILD RATING BUTTONS =====
+    function buildRatingGrid() {
+        ratingGrid.innerHTML = '';
+        for (let i = 1; i <= 10; i++) {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.classList.add('rating-btn');
+            btn.textContent = i;
+            btn.dataset.value = i;
+            btn.setAttribute('id', `rating-btn-${i}`);
 
-        // Viewport constraints
-        const xMax = window.innerWidth - btnWidth - padding;
-        const yMax = window.innerHeight - btnHeight - padding;
-
-        // Find cursor or touch coordinates
-        let clientX = 0;
-        let clientY = 0;
-
-        if (e && e.clientX !== undefined) {
-            clientX = e.clientX;
-            clientY = e.clientY;
-        } else if (e && e.touches && e.touches[0]) {
-            clientX = e.touches[0].clientX;
-            clientY = e.touches[0].clientY;
-        } else {
-            const rect = btnNo.getBoundingClientRect();
-            clientX = rect.left + btnWidth / 2;
-            clientY = rect.top + btnHeight / 2;
-        }
-
-        let newX = Math.random() * xMax;
-        let newY = Math.random() * yMax;
-
-        // Keep the button at least 150px away from the pointer coordinates
-        let attempts = 0;
-        while (attempts < 25) {
-            const distance = Math.hypot(newX + btnWidth / 2 - clientX, newY + btnHeight / 2 - clientY);
-            if (distance > 150) {
-                break;
+            // If this question already has a score selected, restore it
+            if (answers[currentQuestion].score === i) {
+                btn.classList.add('selected');
+                btn.style.background = RATING_COLORS[i - 1];
+                btn.style.boxShadow  = `0 6px 20px ${RATING_COLORS[i - 1]}66`;
             }
-            newX = Math.random() * xMax;
-            newY = Math.random() * yMax;
-            attempts++;
+
+            btn.addEventListener('click', () => selectRating(i));
+            ratingGrid.appendChild(btn);
         }
-
-        // Clamp button within viewport bounds
-        newX = Math.max(padding, Math.min(newX, xMax));
-        newY = Math.max(padding, Math.min(newY, yMax));
-
-        btnNo.style.left = `${newX}px`;
-        btnNo.style.top = `${newY}px`;
     }
 
-    // Mouse and Touch event listeners for escaping
-    btnNo.addEventListener('mouseover', escapeButton);
-    btnNo.addEventListener('mouseenter', escapeButton);
-    btnNo.addEventListener('touchstart', escapeButton, { passive: false });
-    
-    // Safety fallback: if clicked, escape instead of triggering default behavior
-    btnNo.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        escapeButton(e);
-    });
+    function selectRating(value) {
+        answers[currentQuestion].score = value;
 
-    // ================= SCREEN TRANSITIONS & STEP NAVIGATION =================
-    
-    // Screen 1 -> Screen 2 (Planner Step 1)
-    btnYes.addEventListener('click', () => {
-        screenInvite.classList.remove('active-screen');
-        screenInvite.classList.add('hide-screen');
-        
-        screenPlanner.classList.remove('hide-screen');
-        screenPlanner.classList.add('active-screen');
-        
-        // Reset steps progress UI
-        plannerStepFood.classList.remove('hide-step');
-        plannerStepFood.classList.add('active-step');
-        plannerStepMovie.classList.remove('active-step');
-        plannerStepMovie.classList.add('hide-step');
-        
-        indicatorFood.classList.add('active');
-        indicatorMovie.classList.remove('active');
-        progressFill.style.width = '50%';
-
-        // Restore No button if returning to screen 1 is ever possible
-        resetNoButton();
-        
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    // Step 1 -> Step 2
-    btnFoodNext.addEventListener('click', () => {
-        // Validate if food choice is selected
-        const selectedFood = document.querySelector('input[name="food-choice"]:checked');
-        if (!selectedFood) {
-            // Highlight validation by triggering browser bubble
-            const firstRadio = document.querySelector('input[name="food-choice"]');
-            if (firstRadio) firstRadio.reportValidity();
-            return;
-        }
-
-        // Slide/Fade to Step 2
-        plannerStepFood.classList.remove('active-step');
-        plannerStepFood.classList.add('hide-step');
-        
-        plannerStepMovie.classList.remove('hide-step');
-        plannerStepMovie.classList.add('active-step');
-        
-        indicatorFood.classList.remove('active');
-        indicatorMovie.classList.add('active');
-        progressFill.style.width = '100%';
-        
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    // Step 2 -> Step 1
-    btnMoviePrev.addEventListener('click', () => {
-        plannerStepMovie.classList.remove('active-step');
-        plannerStepMovie.classList.add('hide-step');
-        
-        plannerStepFood.classList.remove('hide-step');
-        plannerStepFood.classList.add('active-step');
-        
-        indicatorFood.classList.add('active');
-        indicatorMovie.classList.remove('active');
-        progressFill.style.width = '50%';
-        
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    function resetNoButton() {
-        btnNo.classList.remove('btn-escape');
-        btnNo.style.position = '';
-        btnNo.style.left = '';
-        btnNo.style.top = '';
-        btnNo.style.width = '';
-        btnNo.style.height = '';
-    }
-
-    // ================= DYNAMIC FORM INPUTS =================
-    movieRadios.forEach(radio => {
-        radio.addEventListener('change', () => {
-            if (radio.id === 'movie-other') {
-                customInputLabel.innerText = "Quel film te ferait plaisir ? 🍿";
-                customInputText.placeholder = "Ex: La La Land, Shrek...";
-                customInputContainer.classList.remove('hide-input');
-                customInputText.setAttribute('required', 'true');
-                customInputText.focus();
-            } else if (radio.id === 'movie-proposal') {
-                customInputLabel.innerText = "Quelle est ta proposition ou idée ? 💡";
-                customInputText.placeholder = "Ex: Un escape game, aller voir le coucher de soleil...";
-                customInputContainer.classList.remove('hide-input');
-                customInputText.setAttribute('required', 'true');
-                customInputText.focus();
-            } else {
-                customInputContainer.classList.add('hide-input');
-                customInputText.removeAttribute('required');
-                customInputText.value = '';
+        // Update all buttons visually
+        document.querySelectorAll('.rating-btn').forEach(b => {
+            const v = parseInt(b.dataset.value);
+            b.classList.remove('selected');
+            b.style.background = '';
+            b.style.boxShadow  = '';
+            if (v === value) {
+                b.classList.add('selected');
+                b.style.background = RATING_COLORS[value - 1];
+                b.style.boxShadow  = `0 6px 24px ${RATING_COLORS[value - 1]}77`;
             }
         });
-    });
 
-    // ================= FORM SUBMISSION & SUCCESS SCREEN =================
-    dateForm.addEventListener('submit', (e) => {
-        e.preventDefault();
+        // Update label
+        const label = QUESTIONS[currentQuestion].ratingLabels[value - 1];
+        ratingLabel.textContent = `${value}/10 — ${label}`;
+        ratingLabel.style.color = RATING_COLORS[value - 1];
 
-        // Get final selections
-        const selectedFood = document.querySelector('input[name="food-choice"]:checked');
-        const selectedMovie = document.querySelector('input[name="movie-choice"]:checked');
+        // Enable Next button
+        btnNext.disabled = false;
+    }
 
-        if (!selectedFood || !selectedMovie) return;
+    // ===== RENDER QUESTION =====
+    function renderQuestion(direction = 'right') {
+        const q = QUESTIONS[currentQuestion];
 
-        let foodVal = selectedFood.value;
-        let movieVal = selectedMovie.value;
+        // Animate
+        const animClass = direction === 'right' ? 'slide-in-right' : 'slide-in-left';
+        const content = document.getElementById('question-content');
+        content.classList.remove('slide-in-right', 'slide-in-left');
+        void content.offsetWidth; // reflow
+        content.classList.add(animClass);
 
-        // Custom movie input logic
-        if (selectedMovie.value === 'Autre' || selectedMovie.value === 'Proposition') {
-            const customVal = customInputText.value.trim();
-            if (customVal) {
-                movieVal = customVal;
-            } else {
-                movieVal = selectedMovie.value === 'Autre' ? "Un film surprise 🎬" : "Une surprise 💡";
-            }
+        // Content
+        questionEmoji.textContent = q.emoji;
+        questionText.textContent  = q.text;
+        questionCounter.textContent = `Question ${currentQuestion + 1} / ${QUESTIONS.length}`;
+        progressFill.style.width  = `${((currentQuestion + 1) / QUESTIONS.length) * 100}%`;
+
+        // Restore comment
+        commentInput.value = answers[currentQuestion].comment || '';
+
+        // Restore label
+        const score = answers[currentQuestion].score;
+        if (score) {
+            ratingLabel.textContent = `${score}/10 — ${q.ratingLabels[score - 1]}`;
+            ratingLabel.style.color = RATING_COLORS[score - 1];
+        } else {
+            ratingLabel.textContent = 'Sélectionne une note ✨';
+            ratingLabel.style.color = '';
         }
 
-        // Format label details with emojis
-        if (foodVal === 'Sushi') foodVal = 'Sushis 🍣';
-        if (foodVal === 'Tartare de bœuf') foodVal = 'Tartare de bœuf 🥩';
-        if (foodVal === 'Pizza') foodVal = 'Pizza 🍕';
-        if (foodVal === 'Salade gourmande (tomates & co)') foodVal = 'Salade fraîche 🥗';
-        if (foodVal === 'Barbecue') foodVal = 'Barbecue 🔥';
+        // Build buttons
+        buildRatingGrid();
 
-        if (movieVal === 'Star Wars') movieVal = 'Star Wars 🌌';
-        if (movieVal === 'Footloose') movieVal = 'Footloose 🕺';
-        if (movieVal === 'Le Monde de Nemo') movieVal = 'Le Monde de Nemo 🐠';
+        // Nav state
+        btnNext.disabled = (answers[currentQuestion].score === null);
+        btnPrev.style.visibility = currentQuestion === 0 ? 'hidden' : 'visible';
 
-        // Update success text
-        summaryFood.innerText = foodVal;
-        summaryMovie.innerText = movieVal;
+        // Last question: change Next to "Terminer"
+        if (currentQuestion === QUESTIONS.length - 1) {
+            btnNext.textContent = 'Terminer ✅';
+        } else {
+            btnNext.textContent = 'Suivant ➡️';
+        }
+    }
 
-        // Configure pre-filled email mailto link
-        const emailAddress = 'gabi.nyons@gmail.com';
-        const emailSubject = 'Planification de notre date romantique ! ❤️';
-        const emailBody = `Coucou !\n\nVoici le programme choisi pour notre date de retrouvailles :\n\n🍴 Plat choisi : ${foodVal}\n🎬 Programme cinéma : ${movieVal}\n\nJ'ai tellement hâte de te retrouver, ça va être incroyable. 🥰`;
-        
-        const mailtoLink = `mailto:${emailAddress}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-        btnSendEmail.setAttribute('href', mailtoLink);
-
-        // Trigger confetti rain
-        triggerHeartsCelebration();
-
-        // Hide Planner & Show Success
-        screenPlanner.classList.remove('active-screen');
-        screenPlanner.classList.add('hide-screen');
-        
-        screenSuccess.classList.remove('hide-screen');
-        screenSuccess.classList.add('active-screen');
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    // ===== NAVIGATION =====
+    btnStart.addEventListener('click', () => {
+        screenWelcome.classList.replace('active-screen', 'hide-screen');
+        screenQuestion.classList.replace('hide-screen', 'active-screen');
+        renderQuestion('right');
     });
 
-    // ================= RESTART BUTTON =================
+    btnNext.addEventListener('click', () => {
+        // Save comment
+        answers[currentQuestion].comment = commentInput.value.trim();
+
+        if (currentQuestion < QUESTIONS.length - 1) {
+            currentQuestion++;
+            renderQuestion('right');
+        } else {
+            // Go to success
+            showSuccess();
+        }
+    });
+
+    btnPrev.addEventListener('click', () => {
+        answers[currentQuestion].comment = commentInput.value.trim();
+        if (currentQuestion > 0) {
+            currentQuestion--;
+            renderQuestion('left');
+        }
+    });
+
     btnRestart.addEventListener('click', () => {
-        // Reset form inputs
-        dateForm.reset();
-        customInputContainer.classList.add('hide-input');
-        customInputText.removeAttribute('required');
-        
-        // Go back to step 1
-        screenSuccess.classList.remove('active-screen');
-        screenSuccess.classList.add('hide-screen');
-        
-        screenPlanner.classList.remove('hide-screen');
-        screenPlanner.classList.add('active-screen');
+        currentQuestion = 0;
+        answers = Array(QUESTIONS.length).fill(null).map(() => ({ score: null, comment: '' }));
 
-        plannerStepFood.classList.remove('hide-step');
-        plannerStepFood.classList.add('active-step');
-        plannerStepMovie.classList.remove('active-step');
-        plannerStepMovie.classList.add('hide-step');
-        
-        indicatorFood.classList.add('active');
-        indicatorMovie.classList.remove('active');
-        progressFill.style.width = '50%';
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        screenSuccess.classList.replace('active-screen', 'hide-screen');
+        screenWelcome.classList.replace('hide-screen', 'active-screen');
     });
 
-    // ================= HEARTS CELEBRATION (CONFETTI) =================
-    function triggerHeartsCelebration() {
-        const duration = 3000;
-        const end = Date.now() + duration;
+    // ===== SUCCESS SCREEN =====
+    function showSuccess() {
+        screenQuestion.classList.replace('active-screen', 'hide-screen');
+        screenSuccess.classList.replace('hide-screen', 'active-screen');
 
-        const interval = setInterval(() => {
-            if (Date.now() > end) {
-                return clearInterval(interval);
+        // Calculate average
+        const total = answers.reduce((sum, a) => sum + (a.score || 0), 0);
+        const avg   = (total / QUESTIONS.length).toFixed(1);
+        averageScore.textContent = `${avg}/10`;
+
+        // Build results list
+        resultsSummary.innerHTML = '';
+        answers.forEach((a, i) => {
+            const item = document.createElement('div');
+            item.classList.add('result-item');
+
+            const qText = document.createElement('span');
+            qText.classList.add('result-question');
+            qText.textContent = `${QUESTIONS[i].emoji} ${QUESTIONS[i].text}`;
+
+            const scoreSpan = document.createElement('span');
+            scoreSpan.classList.add('result-score');
+            scoreSpan.style.color = RATING_COLORS[(a.score || 1) - 1];
+            scoreSpan.textContent = `${a.score || '?'}/10`;
+
+            item.appendChild(qText);
+            item.appendChild(scoreSpan);
+
+            if (a.comment) {
+                const comment = document.createElement('span');
+                comment.classList.add('result-comment');
+                comment.textContent = `"${a.comment}"`;
+                item.appendChild(comment);
             }
 
-            const heart = document.createElement('div');
-            heart.classList.add('floating-heart');
-            
-            const size = Math.random() * 20 + 15;
-            const left = Math.random() * 100;
-            const color = heartColors[Math.floor(Math.random() * heartColors.length)];
-            
-            heart.style.width = `${size}px`;
-            heart.style.height = `${size}px`;
-            heart.style.left = `${left}%`;
-            heart.style.animationDuration = `${Math.random() * 2 + 1.5}s`;
-            heart.style.backgroundColor = color;
-            heart.style.bottom = '-20px';
-            
-            heartsBackground.appendChild(heart);
+            resultsSummary.appendChild(item);
+        });
 
-            setTimeout(() => {
-                heart.remove();
-            }, 3500);
-        }, 80);
+        // Generate mailto
+        const emailAddress = 'gabi.nyons@gmail.com';
+        const subject = 'Mes réponses à ton questionnaire de satisfaction 💕';
+        let body = `Coucou Gabriel !\n\nVoici mes réponses honnêtes à ton questionnaire de satisfaction :\n\n`;
+
+        answers.forEach((a, i) => {
+            body += `${QUESTIONS[i].emoji} ${QUESTIONS[i].text}\n`;
+            body += `   Note : ${a.score || '?'}/10`;
+            if (a.comment) body += `\n   Commentaire : "${a.comment}"`;
+            body += '\n\n';
+        });
+
+        body += `━━━━━━━━━━━━━━━━\nMoyenne générale : ${avg}/10\n\n`;
+        body += `Je t'aime ❤️`;
+
+        btnEmail.setAttribute('href', `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+
+        heartsCelebration();
     }
 });
