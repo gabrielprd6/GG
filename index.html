@@ -3,335 +3,1737 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Révisions Philo — QCM</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<title>PhiloQCM — L'excellence au Bac</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0f0d1a;--card:rgba(255,255,255,.04);--border:rgba(255,255,255,.08);--accent:#a78bfa;--accent-glow:rgba(167,139,250,.35);--green:#34d399;--red:#f87171;--text:#f1f0f5;--muted:#9b95a8;--font-h:'DM Serif Display',serif;--font-b:'Inter',sans-serif}
-*{margin:0;padding:0;box-sizing:border-box}
-body{min-height:100vh;background:var(--bg);font-family:var(--font-b);color:var(--text);display:flex;align-items:center;justify-content:center;padding:20px}
-.container{width:100%;max-width:700px;z-index:10}
-.card{background:var(--card);border:1px solid var(--border);backdrop-filter:blur(20px);border-radius:28px;padding:36px 32px;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:fadeIn .6s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.hide{display:none!important}
-h1{font-family:var(--font-h);font-size:2.6rem;text-align:center;background:linear-gradient(135deg,#a78bfa,#c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px}
-h2{font-family:var(--font-h);font-size:1.6rem;color:var(--accent);margin-bottom:8px}
-.subtitle{text-align:center;color:var(--muted);margin-bottom:32px;font-size:.95rem;line-height:1.6}
-/* Theme cards */
-.themes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:24px}
-.theme-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:20px;padding:24px 16px;text-align:center;cursor:pointer;transition:all .35s cubic-bezier(.175,.885,.32,1.275)}
-.theme-card:hover{background:rgba(167,139,250,.08);border-color:var(--accent);transform:translateY(-4px) scale(1.02);box-shadow:0 12px 30px var(--accent-glow)}
-.theme-card .emoji{font-size:2.8rem;display:block;margin-bottom:10px}
-.theme-card .name{font-weight:800;font-size:1.05rem;color:var(--text)}
-.theme-card .count{font-size:.78rem;color:var(--muted);margin-top:4px}
-/* Progress */
-.progress-bar{display:flex;align-items:center;gap:12px;margin-bottom:28px;background:rgba(255,255,255,.02);border-radius:16px;padding:10px 16px;border:1px solid var(--border)}
-.progress-label{font-size:.8rem;font-weight:700;color:var(--accent);white-space:nowrap}
-.progress-track{flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:10px;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,#a78bfa,#7c3aed);border-radius:10px;transition:width .4s ease}
-.score-label{font-size:.8rem;font-weight:700;color:var(--green);white-space:nowrap}
-/* Question */
-.q-emoji{font-size:2.4rem;text-align:center;display:block;margin-bottom:12px}
-.q-text{font-size:1.2rem;font-weight:700;line-height:1.6;text-align:center;margin-bottom:28px;color:var(--text)}
-.q-theme-tag{display:inline-block;background:rgba(167,139,250,.12);color:var(--accent);font-size:.72rem;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:16px;text-transform:uppercase;letter-spacing:1px}
-/* Answer options */
-.options{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
-.option-btn{background:rgba(255,255,255,.03);border:1.5px solid rgba(255,255,255,.1);border-radius:16px;padding:16px 20px;font-family:var(--font-b);font-size:.95rem;font-weight:600;color:var(--text);cursor:pointer;text-align:left;transition:all .25s ease;line-height:1.5}
-.option-btn:hover:not(.disabled){background:rgba(167,139,250,.06);border-color:rgba(167,139,250,.3);transform:translateX(4px)}
-.option-btn.correct{background:rgba(52,211,153,.1)!important;border-color:var(--green)!important;color:var(--green)!important;box-shadow:0 4px 16px rgba(52,211,153,.2)}
-.option-btn.wrong{background:rgba(248,113,113,.08)!important;border-color:var(--red)!important;color:var(--red)!important}
-.option-btn.disabled{cursor:default;opacity:.7}
-.option-btn.disabled:hover{transform:none;background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.1)}
-.option-letter{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.06);font-weight:800;font-size:.82rem;margin-right:12px;flex-shrink:0;transition:all .25s}
-.correct .option-letter{background:var(--green);color:white}
-.wrong .option-letter{background:var(--red);color:white}
-/* Explanation */
-.explanation{background:rgba(167,139,250,.06);border-left:4px solid var(--accent);border-radius:0 16px 16px 0;padding:18px 20px;margin-bottom:24px;animation:slideDown .4s ease}
-@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
-.explanation .expl-title{font-weight:800;color:var(--accent);margin-bottom:8px;font-size:.88rem;text-transform:uppercase;letter-spacing:.5px}
-.explanation .expl-text{color:var(--muted);font-size:.9rem;line-height:1.7}
-.explanation .expl-text strong{color:var(--text)}
-/* Buttons */
-.btn{border:none;border-radius:50px;padding:15px 32px;font-family:var(--font-b);font-size:.98rem;font-weight:700;cursor:pointer;transition:all .3s cubic-bezier(.175,.885,.32,1.275);display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
-.btn-primary{background:var(--accent);color:white;box-shadow:0 8px 24px var(--accent-glow)}
-.btn-primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 14px 32px var(--accent-glow)}
-.btn-ghost{background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--border)}
-.btn-ghost:hover{background:rgba(255,255,255,.1);color:white}
-.nav-row{display:flex;justify-content:flex-end;gap:12px}
-/* Results */
-.result-circle{width:140px;height:140px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px;border:4px solid var(--accent);background:rgba(167,139,250,.06)}
-.result-circle .big-score{font-size:2.4rem;font-weight:900;color:var(--accent)}
-.result-circle .out-of{font-size:.85rem;color:var(--muted)}
-.result-msg{text-align:center;font-size:1.1rem;color:var(--muted);margin-bottom:28px;line-height:1.6}
-.result-details{display:flex;flex-direction:column;gap:8px;margin-bottom:28px;max-height:300px;overflow-y:auto}
-.result-item{display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.02);border-radius:14px;padding:12px 16px;font-size:.85rem}
-.result-icon{font-size:1.1rem;flex-shrink:0;margin-top:2px}
-.result-q{color:var(--muted);line-height:1.5}
-.result-q strong{color:var(--text)}
-.results-btns{display:flex;flex-direction:column;gap:10px;align-items:center}
-.results-btns .btn{width:100%;max-width:340px}
-@media(max-width:560px){
-.card{padding:24px 16px;border-radius:22px}
-h1{font-size:2rem}
-.themes-grid{grid-template-columns:1fr 1fr;gap:10px}
-.q-text{font-size:1.05rem}
+/* ================= GLOBAL SYSTEM & VARIABLES ================= */
+:root {
+  --bg-color: #0b071e;
+  --panel-bg: rgba(18, 14, 38, 0.6);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --text-main: #f3f1fa;
+  --text-muted: #a5a1b8;
+  
+  /* Theme-specific accent colors (default: all) */
+  --accent: #9d4edd;
+  --accent-rgb: 157, 78, 221;
+  --accent-light: #c77dff;
+  --accent-glow: rgba(157, 78, 221, 0.35);
+  
+  /* Fixed semantic colors */
+  --success: #10b981;
+  --success-glow: rgba(16, 185, 129, 0.25);
+  --danger: #ef4444;
+  --danger-glow: rgba(239, 68, 68, 0.25);
+  
+  /* Fonts */
+  --font-title: 'Playfair Display', serif;
+  --font-body: 'Outfit', sans-serif;
+}
+
+/* Theme variation definitions */
+.theme-travail {
+  --accent: #f59e0b;
+  --accent-rgb: 245, 158, 11;
+  --accent-light: #fbbf24;
+  --accent-glow: rgba(245, 158, 11, 0.35);
+}
+
+.theme-temps {
+  --accent: #3b82f6;
+  --accent-rgb: 59, 130, 246;
+  --accent-light: #60a5fa;
+  --accent-glow: rgba(59, 130, 246, 0.35);
+}
+
+.theme-nature {
+  --accent: #10b981;
+  --accent-rgb: 16, 185, 129;
+  --accent-light: #34d399;
+  --accent-glow: rgba(16, 185, 129, 0.35);
+}
+
+.theme-all {
+  --accent: #ec4899;
+  --accent-rgb: 236, 72, 153;
+  --accent-light: #f472b6;
+  --accent-glow: rgba(236, 72, 153, 0.35);
+}
+
+/* Reset & Setup */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  font-family: var(--font-body);
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Background Artwork */
+.bg-gradient {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  background: radial-gradient(circle at 10% 20%, #150f30 0%, #080512 90%);
+}
+
+.bg-orb {
+  position: fixed;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(140px);
+  z-index: -1;
+  opacity: 0.15;
+  pointer-events: none;
+  transition: background 1s ease, transform 10s ease-in-out;
+  animation: orbFloat 25s infinite alternate;
+}
+
+.bg-orb-1 {
+  background: var(--accent);
+  top: -200px;
+  right: -100px;
+}
+
+.bg-orb-2 {
+  background: #4f46e5;
+  bottom: -200px;
+  left: -100px;
+  animation-delay: -5s;
+}
+
+@keyframes orbFloat {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(60px, 40px) scale(1.1); }
+  100% { transform: translate(-40px, -60px) scale(0.9); }
+}
+
+/* Container & Glass Cards */
+.container {
+  width: 100%;
+  max-width: 760px;
+  position: relative;
+  z-index: 10;
+}
+
+.card {
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-radius: 32px;
+  padding: 48px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(0);
+}
+
+.card.hide {
+  opacity: 0;
+  transform: translateY(30px) scale(0.98);
+  pointer-events: none;
+  display: none !important;
+}
+
+/* Typography */
+h1 {
+  font-family: var(--font-title);
+  font-size: 3.2rem;
+  font-weight: 800;
+  text-align: center;
+  background: linear-gradient(135deg, #ffffff 30%, var(--accent-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 40px;
+  font-weight: 300;
+}
+
+.subtitle strong {
+  color: var(--accent-light);
+  font-weight: 600;
+}
+
+/* Header Info */
+.quiz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  gap: 16px;
+}
+
+.theme-badge {
+  background: rgba(var(--accent-rgb), 0.15);
+  border: 1px solid rgba(var(--accent-rgb), 0.3);
+  color: var(--accent-light);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  box-shadow: 0 4px 15px rgba(var(--accent-rgb), 0.1);
+  transition: all 0.3s;
+}
+
+.score-badge {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--success);
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1);
+}
+
+/* Progress Tracker */
+.progress-container {
+  margin-bottom: 35px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 100px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  border-radius: 100px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* Theme Selection Cards */
+.themes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.theme-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  padding: 30px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at top, rgba(var(--theme-rgb), 0.15), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.theme-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--theme-color);
+  box-shadow: 0 15px 40px rgba(var(--theme-rgb), 0.2),
+              inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.theme-card:hover::before {
+  opacity: 1;
+}
+
+.theme-card.tc-travail {
+  --theme-color: #f59e0b;
+  --theme-rgb: 245, 158, 11;
+}
+.theme-card.tc-temps {
+  --theme-color: #3b82f6;
+  --theme-rgb: 59, 130, 246;
+}
+.theme-card.tc-nature {
+  --theme-color: #10b981;
+  --theme-rgb: 16, 185, 129;
+}
+
+.theme-card .emoji {
+  font-size: 3.2rem;
+  display: block;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+  transition: transform 0.3s ease;
+}
+
+.theme-card:hover .emoji {
+  transform: scale(1.15) rotate(5deg);
+}
+
+.theme-card .name {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--text-main);
+  display: block;
+}
+
+.theme-card .count {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+  display: block;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Question Area */
+.question-box {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.q-emoji {
+  font-size: 3.5rem;
+  display: block;
+  margin-bottom: 15px;
+  filter: drop-shadow(0 8px 15px rgba(0,0,0,0.3));
+}
+
+.q-text {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #ffffff;
+}
+
+/* Choices Options */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.option-btn {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 20px 24px;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--text-main);
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  line-height: 1.4;
+  position: relative;
+  overflow: hidden;
+}
+
+.option-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, rgba(255,255,255,0.05), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.option-btn:hover:not(.disabled) {
+  background: rgba(var(--accent-rgb), 0.08);
+  border-color: rgba(var(--accent-rgb), 0.4);
+  transform: translateX(6px);
+  box-shadow: 0 4px 20px rgba(var(--accent-rgb), 0.15);
+}
+
+.option-btn:hover:not(.disabled)::after {
+  opacity: 1;
+}
+
+.option-btn:active:not(.disabled) {
+  transform: scale(0.98) translateX(6px);
+}
+
+.option-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 800;
+  font-size: 0.9rem;
+  margin-right: 18px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition: all 0.3s;
+}
+
+.option-btn:hover:not(.disabled) .option-letter {
+  background: rgba(var(--accent-rgb), 0.2);
+  color: var(--accent-light);
+  border-color: rgba(var(--accent-rgb), 0.4);
+}
+
+/* Answered States */
+.option-btn.disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.option-btn.correct {
+  background: rgba(16, 185, 129, 0.12) !important;
+  border-color: var(--success) !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.25),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: scale(1.01);
+}
+
+.option-btn.correct .option-letter {
+  background: var(--success) !important;
+  color: #ffffff !important;
+  border-color: var(--success) !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.option-btn.wrong {
+  background: rgba(239, 68, 68, 0.1) !important;
+  border-color: var(--danger) !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  box-shadow: 0 10px 30px rgba(239, 68, 68, 0.2);
+}
+
+.option-btn.wrong .option-letter {
+  background: var(--danger) !important;
+  color: #ffffff !important;
+  border-color: var(--danger) !important;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+/* Explanation Block (The Philosophy Quote Card) */
+.explanation-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(var(--accent-rgb), 0.05) 100%);
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  border-left: 5px solid var(--accent);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 30px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  animation: cardSlideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes cardSlideUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.expl-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--accent-light);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.expl-body {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #d1ceda;
+}
+
+.expl-body strong {
+  color: #ffffff;
+  background: rgba(var(--accent-rgb), 0.15);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Action Buttons */
+.btn {
+  border: none;
+  border-radius: 100px;
+  padding: 16px 36px;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: #ffffff;
+  box-shadow: 0 8px 30px var(--accent-glow);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(var(--accent-rgb), 0.5),
+              0 0 15px rgba(var(--accent-rgb), 0.3);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-main);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.btn-home-mix {
+  width: 100%;
+  max-width: 400px;
+  margin: 10px auto 0;
+  display: flex;
+}
+
+.btn-sound {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(18, 14, 38, 0.8);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  backdrop-filter: blur(10px);
+}
+
+.btn-sound:hover {
+  background: var(--accent);
+  color: #ffffff;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.footer-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+/* Results Screen Elements */
+.results-container {
+  text-align: center;
+}
+
+.score-pie {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: conic-gradient(var(--accent) 0%, rgba(255,255,255,0.05) 0%);
+  margin: 0 auto 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  transition: background 1s ease;
+}
+
+.score-pie::before {
+  content: '';
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: var(--bg-color);
+  z-index: 1;
+}
+
+.score-display {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.score-display .number {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.score-display .total {
+  font-size: 1rem;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+.result-verdict {
+  font-family: var(--font-title);
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 15px;
+}
+
+.result-quote {
+  font-style: italic;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto 35px;
+  position: relative;
+  padding: 0 20px;
+}
+
+.result-quote::before, .result-quote::after {
+  content: '"';
+  font-size: 3rem;
+  color: rgba(var(--accent-rgb), 0.25);
+  position: absolute;
+  line-height: 1;
+}
+
+.result-quote::before {
+  top: -15px;
+  left: -5px;
+}
+
+.result-quote::after {
+  bottom: -45px;
+  right: -5px;
+}
+
+.results-review {
+  max-height: 280px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.01);
+  padding: 15px;
+  margin-bottom: 35px;
+  text-align: left;
+}
+
+/* Custom Scrollbar */
+.results-review::-webkit-scrollbar {
+  width: 6px;
+}
+.results-review::-webkit-scrollbar-track {
+  background: transparent;
+}
+.results-review::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+}
+.results-review::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+.review-item {
+  display: flex;
+  gap: 15px;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.review-item:last-child {
+  border-bottom: none;
+}
+
+.review-status {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.review-content {
+  font-size: 0.95rem;
+}
+
+.review-content .q {
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.review-content .ans {
+  color: var(--text-muted);
+}
+
+.review-content .ans .ok {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.review-content .ans .nok {
+  color: var(--danger);
+  text-decoration: line-through;
+}
+
+.actions-row {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+/* Confetti canvas */
+#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 99;
+}
+
+/* Responsive Rules */
+@media (max-width: 768px) {
+  .card {
+    padding: 30px 24px;
+    border-radius: 24px;
+  }
+  
+  h1 {
+    font-size: 2.3rem;
+  }
+  
+  .themes-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .q-text {
+    font-size: 1.4rem;
+  }
+  
+  .actions-row {
+    flex-direction: column;
+  }
+  
+  .actions-row button {
+    width: 100%;
+  }
 }
 </style>
 </head>
 <body>
+
+<div class="bg-gradient"></div>
+<div class="bg-orb bg-orb-1" id="orb-1"></div>
+<div class="bg-orb bg-orb-2" id="orb-2"></div>
+
+<canvas id="confetti-canvas"></canvas>
+
+<!-- Sound Controller -->
+<button class="btn-sound" id="btn-sound" title="Activer/Désactiver le son">🔊</button>
+
 <div class="container">
 
-<!-- SCREEN: HOME -->
-<div id="screen-home" class="card">
-<h1>📚 Révisions Philo</h1>
-<p class="subtitle">Prépare ton bac avec des QCM corrigés et expliqués.<br>Choisis un thème pour commencer !</p>
-<div class="themes-grid">
-  <div class="theme-card" onclick="startTheme('travail')">
-    <span class="emoji">⚒️</span>
-    <span class="name">Le Travail</span>
-    <span class="count">10 questions</span>
+  <!-- SCREEN: HOME -->
+  <div id="screen-home" class="card">
+    <h1>PhiloQCM</h1>
+    <p class="subtitle">Prépare ton épreuve du Bac avec brio.<br>Révise les notions clés à travers <strong>30 questions interactives expliquées</strong>.</p>
+    
+    <div class="themes-grid">
+      <!-- Theme 1 -->
+      <div class="theme-card tc-travail" onclick="startQuiz('travail')">
+        <span class="emoji">⚒️</span>
+        <span class="name">Le Travail</span>
+        <span class="count">10 questions</span>
+      </div>
+      <!-- Theme 2 -->
+      <div class="theme-card tc-temps" onclick="startQuiz('temps')">
+        <span class="emoji">⏳</span>
+        <span class="name">Le Temps</span>
+        <span class="count">10 questions</span>
+      </div>
+      <!-- Theme 3 -->
+      <div class="theme-card tc-nature" onclick="startQuiz('nature')">
+        <span class="emoji">🌿</span>
+        <span class="name">La Nature</span>
+        <span class="count">10 questions</span>
+      </div>
+    </div>
+    
+    <div style="text-align: center;">
+      <button class="btn btn-primary btn-home-mix" onclick="startQuiz('all')">
+        🎲 Mélanger toutes les notions (30 Q)
+      </button>
+    </div>
   </div>
-  <div class="theme-card" onclick="startTheme('temps')">
-    <span class="emoji">⏳</span>
-    <span class="name">Le Temps</span>
-    <span class="count">10 questions</span>
-  </div>
-  <div class="theme-card" onclick="startTheme('nature')">
-    <span class="emoji">🌿</span>
-    <span class="name">La Nature</span>
-    <span class="count">10 questions</span>
-  </div>
-</div>
-<div style="text-align:center">
-  <button class="btn btn-primary" onclick="startTheme('all')">🎲 Mélange des 3 thèmes (30 questions)</button>
-</div>
-</div>
 
-<!-- SCREEN: QUIZ -->
-<div id="screen-quiz" class="card hide">
-<div class="progress-bar">
-  <span class="progress-label" id="q-counter">1/10</span>
-  <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:10%"></div></div>
-  <span class="score-label" id="score-label">✅ 0</span>
-</div>
-<div id="q-theme-tag" class="q-theme-tag">Le Travail</div>
-<p class="q-text" id="q-text">Chargement...</p>
-<div class="options" id="options-container"></div>
-<div id="explanation-box" class="explanation hide">
-  <div class="expl-title">💡 Explication</div>
-  <div class="expl-text" id="expl-text"></div>
-</div>
-<div class="nav-row">
-  <button class="btn btn-primary hide" id="btn-next" onclick="nextQuestion()">Suivant ➡️</button>
-</div>
-</div>
+  <!-- SCREEN: QUIZ -->
+  <div id="screen-quiz" class="card hide">
+    <!-- Header indicators -->
+    <div class="quiz-header">
+      <div class="theme-badge" id="badge-theme">Le Travail</div>
+      <div class="score-badge">
+        <span class="icon">🏆</span> Score : <span id="score-counter">0</span>
+      </div>
+    </div>
+    
+    <!-- Progress Indicator -->
+    <div class="progress-container">
+      <div class="progress-info">
+        <span id="question-index-label">Question 1 sur 10</span>
+        <span id="progress-percentage">10%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+    
+    <!-- Question Display -->
+    <div class="question-box">
+      <span class="q-emoji" id="question-emoji">💡</span>
+      <h2 class="q-text" id="question-text">Quelle est la position de Platon vis-à-vis du travail de l'artisan ?</h2>
+    </div>
+    
+    <!-- Choices Options -->
+    <div class="options-grid" id="options-grid">
+      <!-- Options buttons will be injected here by JS -->
+    </div>
+    
+    <!-- Explanation Card (Initially hidden) -->
+    <div class="explanation-card hide" id="explanation-box">
+      <div class="expl-header">
+        <span>📚 Eclairage philosophique</span>
+      </div>
+      <div class="expl-body" id="explanation-text">
+        Texte d'explication.
+      </div>
+    </div>
+    
+    <!-- Next button -->
+    <div class="footer-btn-container">
+      <button class="btn btn-primary hide" id="btn-next" onclick="handleNext()">
+        Question suivante ➡️
+      </button>
+    </div>
+  </div>
 
-<!-- SCREEN: RESULTS -->
-<div id="screen-results" class="card hide">
-<h1>Résultats</h1>
-<div class="result-circle">
-  <span class="big-score" id="r-score">0</span>
-  <span class="out-of" id="r-total">/ 10</span>
-</div>
-<p class="result-msg" id="r-msg">Bien joué !</p>
-<div class="result-details" id="r-details"></div>
-<div class="results-btns">
-  <button class="btn btn-primary" onclick="location.reload()">🏠 Retour aux thèmes</button>
-</div>
-</div>
+  <!-- SCREEN: RESULTS -->
+  <div id="screen-results" class="card hide">
+    <div class="results-container">
+      <h1 style="margin-bottom: 25px;">Évaluation Terminée</h1>
+      
+      <!-- Visual Score Dial -->
+      <div class="score-pie" id="score-pie">
+        <div class="score-display">
+          <span class="number" id="result-score">8</span>
+          <span class="total" id="result-total">/ 10</span>
+        </div>
+      </div>
+      
+      <div class="result-verdict" id="result-verdict">Félicitations !</div>
+      <p class="result-quote" id="result-quote">"Le commencement est la moitié de toute action." — Aristote</p>
+      
+      <!-- Review Section -->
+      <div class="results-review" id="results-review">
+        <!-- List of questions correct/incorrect -->
+      </div>
+      
+      <!-- Navigation row -->
+      <div class="actions-row">
+        <button class="btn btn-ghost" onclick="resetQuiz()">🏠 Accueil</button>
+        <button class="btn btn-primary" id="btn-restart-theme" onclick="restartCurrentQuiz()">🔄 Recommencer</button>
+      </div>
+    </div>
+  </div>
 
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════════
-// QUESTIONS DATABASE
-// ═══════════════════════════════════════════════════════════════
-const QUESTIONS = {
-travail: [
-{q:"Pour Marx, qu'est-ce que l'aliénation du travail ?",opts:["Le fait de travailler trop longtemps","Le processus par lequel le travailleur devient étranger au produit de son travail","Le refus de travailler","La division du travail en tâches simples"],correct:1,expl:"Chez <strong>Marx</strong>, l'aliénation désigne le fait que dans le système capitaliste, le travailleur ne se reconnaît plus dans ce qu'il produit : l'objet de son travail lui est étranger, il ne lui appartient pas. Le travail devient alors une activité subie et non épanouissante. C'est un concept central des <em>Manuscrits de 1844</em>."},
-{q:"Selon Hannah Arendt, quelle distinction fondamentale fait-elle concernant l'activité humaine ?",opts:["Travail manuel vs travail intellectuel","Travail, œuvre et action","Travail privé vs travail public","Travail salarié vs travail bénévole"],correct:1,expl:"Dans <strong><em>La Condition de l'homme moderne</em></strong>, Arendt distingue trois activités : le <strong>travail</strong> (labor) lié aux nécessités biologiques et cycliques, l'<strong>œuvre</strong> (work) qui fabrique des objets durables, et l'<strong>action</strong> (action) qui est l'activité politique par excellence. Cette tripartition est fondamentale pour comprendre la dignité humaine."},
-{q:"Quel philosophe a dit que le travail est « l'essence de l'homme » ?",opts:["Nietzsche","Hegel","Aristote","Descartes"],correct:1,expl:"Pour <strong>Hegel</strong>, le travail est ce qui permet à l'homme de se réaliser et de transformer le monde. Dans la célèbre <strong>dialectique du maître et de l'esclave</strong> (<em>Phénoménologie de l'Esprit</em>), c'est l'esclave qui, par son travail, accède à la conscience de soi — tandis que le maître, oisif, stagne."},
-{q:"Que signifie l'étymologie latine du mot « travail » (tripalium) ?",opts:["Un outil de mesure","Un instrument de torture à trois pieux","Un type de charrue romaine","Un contrat d'échange"],correct:1,expl:"Le mot <strong>travail</strong> vient du latin <strong><em>tripalium</em></strong>, un instrument de torture composé de trois pieux. Cette étymologie révèle que le travail a d'abord été perçu comme une <strong>souffrance</strong> et une <strong>contrainte</strong>, avant d'être valorisé positivement à l'époque moderne."},
-{q:"Pour Aristote, pourquoi le travail manuel est-il dévalorisé ?",opts:["Parce qu'il est mal payé","Parce qu'il empêche de se consacrer à la vie contemplative et politique","Parce qu'il est dangereux","Parce qu'il est réservé aux femmes"],correct:1,expl:"<strong>Aristote</strong> considère que le travail manuel (activité des <em>banausos</em>) est indigne de l'homme libre car il enchaîne le corps et empêche la <strong>vie contemplative</strong> (<em>bios theoretikos</em>), qui est pour lui la forme la plus haute d'activité humaine. Seul le loisir (<em>scholè</em>) permet l'exercice de la pensée et de la citoyenneté."},
-{q:"Que défend Paul Lafargue dans « Le Droit à la paresse » ?",opts:["Que le travail est un devoir sacré","Que les ouvriers doivent revendiquer le droit de ne travailler que trois heures par jour","Que la paresse est un vice moral","Que le progrès technique rend le travail plus agréable"],correct:1,expl:"<strong>Paul Lafargue</strong> (gendre de Marx) écrit en 1880 un pamphlet provocateur où il dénonce l'<strong>amour absurde du travail</strong> chez les prolétaires. Il défend l'idée que le progrès technique devrait permettre de <strong>réduire drastiquement le temps de travail</strong> pour que l'homme puisse enfin vivre, penser et profiter de la vie."},
-{q:"Selon Simone Weil, qu'est-ce qui rend le travail ouvrier particulièrement aliénant ?",opts:["Le salaire insuffisant","La soumission au rythme de la machine et la perte d'attention","Le manque de congés payés","Les horaires de nuit"],correct:1,expl:"<strong>Simone Weil</strong>, qui a travaillé en usine pour comprendre la condition ouvrière (<em>La Condition ouvrière</em>, 1951), montre que le travail à la chaîne impose une <strong>soumission totale au rythme mécanique</strong>. L'ouvrier ne peut plus penser, l'attention est captée par des gestes répétitifs : c'est une forme de <strong>déshumanisation</strong>."},
-{q:"Qu'est-ce que la « valeur travail » selon l'éthique protestante décrite par Max Weber ?",opts:["Le prix du travail sur le marché","L'idée que le travail est une vocation divine et un signe d'élection","Un indicateur économique","La quantité de travail contenue dans un produit"],correct:1,expl:"Dans <strong><em>L'Éthique protestante et l'esprit du capitalisme</em></strong>, <strong>Weber</strong> montre que le protestantisme (surtout le calvinisme) a valorisé le travail comme <strong>vocation</strong> (<em>Beruf</em>) et signe de l'élection divine. Cette éthique a contribué à l'essor du capitalisme en faisant du travail acharné une <strong>vertu morale</strong>."},
-{q:"Que signifie la phrase de Nietzsche : « Le travail est la meilleure des polices » ?",opts:["Le travail protège la société du crime","Le travail discipline les individus et les empêche de penser librement","Le travail est encadré par des lois justes","Les policiers travaillent bien"],correct:1,expl:"Pour <strong>Nietzsche</strong> (<em>Aurore</em>, §173), le travail est un instrument de <strong>contrôle social</strong>. En occupant constamment l'individu, il l'empêche de <strong>réfléchir</strong>, de se révolter, de développer sa singularité. Le travail est ainsi une forme de <strong>domestication</strong> de l'être humain."},
-{q:"Quel concept Durkheim associe-t-il à la division du travail social ?",opts:["L'exploitation","La solidarité organique","La lutte des classes","L'anomie uniquement"],correct:1,expl:"<strong>Durkheim</strong> montre dans <em>De la division du travail social</em> (1893) que la spécialisation des tâches crée une <strong>solidarité organique</strong> : chaque individu dépend des autres, comme les organes d'un corps. Cela s'oppose à la solidarité mécanique des sociétés traditionnelles, fondée sur la ressemblance."}
-],
-temps: [
-{q:"Selon saint Augustin, quelle est la nature du temps ?",opts:["Une illusion créée par nos sens","Une réalité objective mesurable","Une expérience subjective de la conscience (distension de l'âme)","Un cycle éternel de retour"],correct:2,expl:"Dans les <strong><em>Confessions</em></strong> (livre XI), <strong>saint Augustin</strong> affirme : « Qu'est-ce que le temps ? Si personne ne me le demande, je le sais ; si je veux l'expliquer, je ne le sais plus. » Le temps est pour lui une <strong>distentio animi</strong> (distension de l'âme) : c'est la conscience qui, par la mémoire, l'attention et l'attente, crée l'expérience temporelle."},
-{q:"Qu'est-ce que la « durée » chez Bergson ?",opts:["Le temps mesuré par les horloges","Le temps vécu par la conscience, qualitatif et indivisible","La durée de vie d'un organisme","Le temps cyclique des saisons"],correct:1,expl:"<strong>Bergson</strong> oppose le <strong>temps spatialisé</strong> (quantitatif, mesuré par les horloges) à la <strong>durée</strong> (<em>durée réelle</em>), qui est le temps tel qu'il est vécu par la conscience : <strong>continu, qualitatif, indivisible</strong>. Chaque instant est unique et s'interpénètre avec les autres. C'est le cœur de l'<em>Essai sur les données immédiates de la conscience</em>."},
-{q:"Que signifie le concept d'« éternel retour » chez Nietzsche ?",opts:["L'histoire se répète toujours à l'identique","Il faut vivre chaque instant comme si on devait le revivre éternellement","Le temps est circulaire comme chez les Grecs","La mort n'existe pas"],correct:1,expl:"L'<strong>éternel retour</strong> chez <strong>Nietzsche</strong> est moins une thèse cosmologique qu'un <strong>test existentiel</strong> : « Voudrais-tu revivre cette vie exactement telle qu'elle fut, une infinité de fois ? » C'est une invitation à <strong>affirmer la vie</strong> dans sa totalité, y compris la souffrance. Celui qui dit « oui » incarne le <em>surhomme</em>."},
-{q:"Pour Heidegger, quel rapport l'homme (Dasein) entretient-il avec le temps ?",opts:["L'homme est indifférent au temps","L'homme est un être temporel dont l'existence est orientée vers la mort","L'homme peut échapper au temps par la méditation","Le temps est une création humaine"],correct:1,expl:"Dans <strong><em>Être et Temps</em></strong>, <strong>Heidegger</strong> montre que le <strong>Dasein</strong> (l'être humain) est fondamentalement un <strong>être-pour-la-mort</strong>. La conscience de notre finitude donne au temps son caractère authentique et nous pousse à vivre de manière résolue. Le temps n'est pas extérieur à nous : nous <strong>sommes</strong> temporels."},
-{q:"Qu'est-ce que l'angoisse du temps selon Pascal ?",opts:["La peur de vieillir","L'impossibilité de vivre le présent, toujours tourné vers le passé ou le futur","La crainte du jugement dernier","Le regret des erreurs passées"],correct:1,expl:"<strong>Pascal</strong> observe dans les <em>Pensées</em> que l'homme ne vit <strong>jamais dans le présent</strong> : « Nous ne vivons jamais, mais nous espérons de vivre. » Nous fuyons le présent par le <strong>divertissement</strong>, car rester face à soi-même nous confronte à notre misère et à notre mortalité. C'est une forme d'angoisse temporelle."},
-{q:"Quel philosophe distingue le « temps vulgaire » du « temps originaire » ?",opts:["Kant","Heidegger","Platon","Sartre"],correct:1,expl:"<strong>Heidegger</strong> distingue le <strong>temps vulgaire</strong> (le temps des horloges, linéaire et mesurable, le temps du « On ») du <strong>temps originaire</strong> (la temporalité authentique du Dasein, orientée vers la mort et la résolution). Le temps vulgaire est une <strong>dégradation</strong> du temps originaire."},
-{q:"Selon Épicure, pourquoi ne faut-il pas craindre la mort ?",opts:["Parce qu'il y a une vie après la mort","Parce que quand nous sommes, la mort n'est pas, et quand la mort est, nous ne sommes plus","Parce que la mort est un passage vers un monde meilleur","Parce que le temps est une illusion"],correct:1,expl:"<strong>Épicure</strong> écrit dans la <em>Lettre à Ménécée</em> : « La mort n'est rien pour nous. » Son argument est logique : la mort est <strong>absence de sensation</strong>. Tant que nous vivons, elle n'est pas là ; quand elle est là, nous ne sommes plus. Il n'y a donc <strong>aucun moment</strong> où nous coexistons avec la mort."},
-{q:"Qu'est-ce que le « temps comme forme a priori de la sensibilité » chez Kant ?",opts:["Le temps est une propriété des choses en soi","Le temps est une structure de notre esprit qui conditionne toute expérience","Le temps est créé par Dieu","Le temps n'existe pas réellement"],correct:1,expl:"Pour <strong>Kant</strong> (<em>Critique de la raison pure</em>), le temps n'est pas une propriété objective du monde mais une <strong>forme a priori de la sensibilité</strong> : c'est notre esprit qui structure toute expérience dans le temps. Sans cette forme, aucune perception ne serait possible. Le temps est donc une condition <strong>subjective</strong> mais <strong>universelle</strong> de la connaissance."},
-{q:"Que signifie le « Carpe Diem » d'Horace dans une perspective philosophique ?",opts:["Profite de chaque instant car le futur est incertain","Cueille des fleurs chaque jour","Vis sans penser au lendemain de manière irresponsable","Le temps est cyclique"],correct:0,expl:"Le <strong>Carpe Diem</strong> (« Cueille le jour ») d'<strong>Horace</strong> est une invitation à <strong>saisir le présent</strong> sans se laisser paralyser par l'incertitude du futur. C'est une sagesse pratique proche de l'<strong>épicurisme</strong> : plutôt que de se tourmenter pour ce qui viendra, il faut savourer l'instant présent avec mesure et gratitude."},
-{q:"Pourquoi Proust dit-il que le temps est « perdu » puis « retrouvé » ?",opts:["Parce qu'il a perdu sa montre","Parce que la mémoire involontaire permet de revivre le passé dans sa vérité","Parce qu'on peut remonter le temps","Parce que le temps est une boucle"],correct:1,expl:"Dans <strong><em>À la recherche du temps perdu</em></strong>, <strong>Proust</strong> montre que le temps « perdu » (le passé oublié) peut être <strong>retrouvé</strong> par la <strong>mémoire involontaire</strong> : une madeleine, une odeur, un pavé inégal font ressurgir le passé dans toute sa richesse sensorielle. L'art et l'écriture deviennent alors le moyen de <strong>vaincre le temps</strong>."}
-],
-nature: [
-{q:"Selon Rousseau, quel est l'état de l'homme dans l'état de nature ?",opts:["Un être violent et belliqueux","Un être bon, solitaire et guidé par la pitié naturelle","Un être rationnel et social","Un être soumis aux dieux"],correct:1,expl:"Dans le <strong><em>Discours sur l'origine de l'inégalité</em></strong>, <strong>Rousseau</strong> imagine l'homme à l'état de nature comme un être <strong>bon</strong>, <strong>solitaire</strong>, guidé par l'<strong>amour de soi</strong> (instinct de conservation) et la <strong>pitié</strong> (compassion naturelle). C'est la société qui le corrompt : « L'homme est né bon, c'est la société qui le déprave. »"},
-{q:"Que signifie la formule de Hobbes : « L'homme est un loup pour l'homme » ?",opts:["Les hommes ressemblent physiquement aux loups","À l'état de nature, les hommes sont en guerre permanente les uns contre les autres","Les hommes doivent vivre en meute","Les loups sont des animaux domesticables"],correct:1,expl:"Pour <strong>Hobbes</strong> (<em>Léviathan</em>), l'état de nature est un état de <strong>guerre de tous contre tous</strong> (<em>bellum omnium contra omnes</em>). Sans État, chacun est une menace pour les autres. C'est pourquoi les hommes acceptent de renoncer à leur liberté naturelle pour se soumettre à un <strong>souverain absolu</strong> garant de la paix (le contrat social)."},
-{q:"Quelle distinction la philosophie fait-elle entre « nature » et « culture » ?",opts:["La nature est belle, la culture est laide","La nature est ce qui est inné et universel, la culture est acquise et variable","La nature concerne les plantes, la culture les humains","Il n'y a pas de distinction"],correct:1,expl:"En philosophie, la <strong>nature</strong> désigne ce qui est <strong>inné, spontané et universel</strong> (commun à toute l'espèce), tandis que la <strong>culture</strong> désigne ce qui est <strong>acquis, construit et variable</strong> selon les sociétés. <strong>Lévi-Strauss</strong> propose comme critère la <strong>règle de l'interdit de l'inceste</strong> : universelle mais normative, elle marque le passage de la nature à la culture."},
-{q:"Pour Descartes, quel rapport l'homme doit-il avoir avec la nature ?",opts:["L'homme doit vénérer la nature comme sacrée","L'homme doit se rendre « maître et possesseur de la nature »","L'homme doit vivre en harmonie avec la nature","L'homme est incapable de comprendre la nature"],correct:1,expl:"Dans le <strong><em>Discours de la méthode</em></strong>, <strong>Descartes</strong> affirme que grâce à la science et à la technique, l'homme peut se rendre <strong>« comme maître et possesseur de la nature »</strong>. Cette vision mécaniste considère la nature comme une <strong>machine</strong> que l'homme peut comprendre et exploiter. Cette posture est aujourd'hui critiquée face à la crise écologique."},
-{q:"Qu'appelle-t-on le « droit naturel » en philosophie ?",opts:["Le droit de profiter de la nature","L'ensemble des droits que l'homme possède par nature, avant toute société","Le droit de l'environnement","Les lois de la physique"],correct:1,expl:"Le <strong>droit naturel</strong> (<em>jus naturale</em>) désigne les droits que tout être humain possède <strong>par nature</strong>, indépendamment des lois civiles : droit à la vie, à la liberté, etc. Des penseurs comme <strong>Locke</strong> et <strong>Grotius</strong> ont fondé sur ce concept l'idée de <strong>droits de l'homme universels</strong>. Il s'oppose au <strong>droit positif</strong> (les lois écrites par les sociétés)."},
-{q:"Selon Spinoza, qu'est-ce que la nature (Deus sive Natura) ?",opts:["Un jardin créé par Dieu","Dieu lui-même, la substance unique et infinie","Un ensemble d'atomes aléatoires","Une illusion de nos sens"],correct:1,expl:"Pour <strong>Spinoza</strong> (<em>Éthique</em>), <strong>Dieu et la Nature sont une seule et même chose</strong> (<em>Deus sive Natura</em>). La nature n'est pas une création de Dieu : elle <strong>est</strong> Dieu, compris comme substance infinie. C'est une position <strong>panthéiste</strong> et <strong>déterministe</strong> : tout dans la nature suit des lois nécessaires, y compris l'homme."},
-{q:"Pourquoi dit-on que l'homme est un « être de culture » plutôt qu'un « être de nature » ?",opts:["Parce que l'homme ne vit pas dans la nature","Parce que l'homme transforme sa nature par l'éducation, le langage et les institutions","Parce que l'homme déteste la nature","Parce que l'homme est artificiel"],correct:1,expl:"L'homme est un <strong>être de culture</strong> car, contrairement à l'animal guidé par l'instinct, il se <strong>construit</strong> à travers l'<strong>éducation</strong>, le <strong>langage</strong>, les <strong>techniques</strong> et les <strong>institutions</strong>. Comme le dit <strong>Merleau-Ponty</strong> : « Tout est fabriqué et tout est naturel chez l'homme. » L'homme n'a pas de nature fixe : il est ce qu'il <strong>devient</strong>."},
-{q:"Que critique Hans Jonas dans « Le Principe responsabilité » ?",opts:["La religion","Le progrès technique incontrôlé qui menace la nature et les générations futures","Le manque de travail","Le temps qui passe"],correct:1,expl:"<strong>Hans Jonas</strong> (1979) propose une <strong>éthique de la responsabilité</strong> face au pouvoir technologique moderne. Il formule un nouvel impératif : « Agis de façon que les effets de ton action soient compatibles avec la permanence d'une vie authentiquement humaine sur terre. » C'est un appel à la <strong>prudence</strong> et au <strong>souci des générations futures</strong>, fondateur de l'éthique écologique."},
-{q:"Qu'est-ce que la « physis » chez les philosophes grecs présocratiques ?",opts:["La forme physique du corps","Le principe d'émergence et de croissance de toute chose, la nature comme processus","Un type de plante médicinale","La force musculaire"],correct:1,expl:"La <strong>physis</strong> (φύσις) chez les <strong>présocratiques</strong> (Héraclite, Thalès, Anaximandre) désigne le <strong>principe d'émergence</strong> de toute réalité : ce qui fait naître, croître et périr les choses. C'est la nature comprise comme <strong>processus dynamique</strong>, non comme simple décor. Aristote reprendra ce concept : la physis est le principe de mouvement interne à chaque être."},
-{q:"Selon le mythe de Prométhée (Platon, Protagoras), pourquoi l'homme a-t-il besoin de la technique ?",opts:["Pour s'amuser","Parce qu'Épiméthée a distribué toutes les qualités naturelles aux animaux, laissant l'homme nu et démuni","Pour dominer les autres espèces par plaisir","Parce que les dieux l'ont ordonné"],correct:1,expl:"Dans le <strong><em>Protagoras</em></strong> de Platon, <strong>Épiméthée</strong> distribue griffes, fourrure et rapidité aux animaux mais <strong>oublie l'homme</strong>. <strong>Prométhée</strong> vole alors le <strong>feu</strong> (la technique) aux dieux pour compenser. Ce mythe illustre que l'homme est un être <strong>naturellement démuni</strong> qui doit <strong>se construire par la technique et la culture</strong> pour survivre."}
-]
+// ==================== PHILOSOPHY QUESTION BANK ====================
+const QUESTION_BANK = {
+  travail: [
+    {
+      q: "Pour Karl Marx, qu'est-ce que l'aliénation du travail ?",
+      emoji: "⚒️",
+      opts: [
+        "Le fait de devoir travailler trop d'heures par semaine",
+        "Le processus par lequel le travailleur devient étranger au produit de son travail",
+        "Le refus global de participer à l'activité de production",
+        "L'obligation de suivre des consignes de sécurité"
+      ],
+      correct: 1,
+      expl: "Chez <strong>Marx</strong>, l'aliénation désigne le fait que dans le système de production industrielle capitaliste, l'ouvrier ne possède ni l'outil de production, ni le produit fini. Son geste lui est imposé et devient mécanique, vidant son travail de sens. C'est développé dans les <em>Manuscrits de 1844</em>."
+    },
+    {
+      q: "Quelle distinction conceptuelle fondamentale Hannah Arendt établit-elle ?",
+      emoji: "💡",
+      opts: [
+        "Le travail manuel face au travail intellectuel",
+        "Le travail (subsistance biologique), l'œuvre (durabilité) et l'action (politique)",
+        "L'activité économique privée face aux décisions publiques",
+        "L'emploi salarié par opposition au travail non rémunéré"
+      ],
+      correct: 1,
+      expl: "Dans <strong><em>La Condition de l'homme moderne</em></strong>, Hannah Arendt segmente la <em>vita activa</em> en 3 : le <strong>Travail</strong> (qui répond aux nécessités biologiques de la vie), l'<strong>Œuvre</strong> (qui crée le monde artificiel d'objets durables) et l'<strong>Action</strong> (la parole politique publique commune entre les hommes)."
+    },
+    {
+      q: "Quel philosophe érige le travail comme l'essence de la liberté et de l'affirmation humaine ?",
+      emoji: "🧠",
+      opts: [
+        "Friedrich Nietzsche",
+        "Georg Wilhelm Friedrich Hegel",
+        "Aristote",
+        "René Descartes"
+      ],
+      correct: 1,
+      expl: "Pour <strong>Hegel</strong> (notamment dans la dialectique du maître et de l'esclave), le travail est formateur. En travaillant, l'esclave transforme la nature matérielle et y projette sa propre pensée, se libérant ainsi mentalement et devenant conscient de lui-même, tandis que le maître reste dépendant de l'esclave."
+    },
+    {
+      q: "Quelle est la provenance étymologique latine du terme « travail » ?",
+      emoji: "📜",
+      opts: [
+        "Un vieux mot signifiant un champ à cultiver",
+        "Le mot 'tripalium', désignant un instrument de torture à trois pieux",
+        "L'outil romain servant à façonner les blocs de pierre",
+        "L'acte légal liant le vassal à son seigneur"
+      ],
+      correct: 1,
+      expl: "Le terme <strong>travail</strong> est dérivé du latin <strong><em>tripalium</em></strong>, qui était un outil de contention à trois pieux servant à maîtriser les animaux difficiles puis à torturer les criminels. Il souligne la dimension originelle de <strong>douleur</strong> et de <strong>contrainte</strong> liée à cette activité."
+    },
+    {
+      q: "Pourquoi Aristote dévalorisait-il le labeur productif et le travail physique ?",
+      emoji: "🏛️",
+      opts: [
+        "Il pensait qu'il était impossible de bien le payer",
+        "Parce qu'il prive l'homme de la 'scholè' nécessaire à la politique et à la pensée",
+        "Il estimait que cela détruisait la santé en quelques années seulement",
+        "Car il considérait la technologie de son époque comme médiocre"
+      ],
+      correct: 1,
+      expl: "Pour <strong>Aristote</strong>, la vie idéale réside dans la contemplation (<em>theoria</em>) et la citoyenneté active. Les activités laborieuses (le travail mécanique ou commercial) aliènent le corps et l'esprit, empêchant d'avoir le loisir libre (<em>scholè</em>) requis pour se cultiver et gouverner."
+    },
+    {
+      q: "Dans son ouvrage provocateur « Le Droit à la paresse », que préconise Paul Lafargue ?",
+      emoji: "🦥",
+      opts: [
+        "Le devoir de travailler le plus possible pour enrichir la nation",
+        "La réduction drastique de la journée de travail à trois heures par jour",
+        "L'abolition totale et immédiate de toute forme de gouvernement",
+        "L'affectation de tous les loisirs à l'apprentissage de la théologie"
+      ],
+      correct: 1,
+      expl: "<strong>Paul Lafargue</strong> (gendre de Karl Marx) publie ce pamphlet en 1880 pour dénoncer 'la folie du travail' de la classe ouvrière. Il soutient que la machine devrait libérer l'homme en remplaçant la fatigue et réclame le droit au loisir créatif et au repos."
+    },
+    {
+      q: "Selon Simone Weil, qu'est-ce qui caractérise le quotidien industriel de l'ouvrier ?",
+      emoji: "⚙️",
+      opts: [
+        "Le bonheur de travailler au sein d'une communauté soudée",
+        "La perte totale de la pensée due à l'adaptation au rythme de la machine",
+        "L'absence totale d'outils performants pour la productivité",
+        "Une fierté aristocratique de produire des ressources"
+      ],
+      correct: 1,
+      expl: "Dans <strong><em>La Condition ouvrière</em></strong> (1951), <strong>Simone Weil</strong>, qui s'est elle-même engagée en usine pour vivre la réalité ouvrière, démontre que la cadence effrénée et répétitive imposée par le taylorisme dépossède l'ouvrier de toute initiative spirituelle ou intellectuelle."
+    },
+    {
+      q: "Quel lien Max Weber fait-il entre le travail et l'essor économique du capitalisme ?",
+      emoji: "📈",
+      opts: [
+        "Le travail manuel a été financé par des monarques absolus",
+        "L'éthique protestante fait du succès professionnel par le travail un devoir divin",
+        "L'abolition des impôts a encouragé les gens à faire des heures supplémentaires",
+        "La météo européenne imposait de travailler en intérieur"
+      ],
+      correct: 1,
+      expl: "Dans <strong><em>L'Éthique protestante et l'esprit du capitalisme</em></strong>, <strong>Max Weber</strong> soutient que les courants puritains et calvinistes ont érigé le labeur assidu (le travail comme vocation ou <em>Beruf</em>) et l'ascétisme financier en signes d'élection divine, catalysant la logique capitaliste."
+    },
+    {
+      q: "Que veut dire Nietzsche en écrivant que « le travail est la meilleure des polices » ?",
+      emoji: "👮",
+      opts: [
+        "Que les policiers sont des personnes très investies dans leur travail",
+        "Qu'il occupe les esprits pour entraver le développement de la réflexion individuelle",
+        "Que le fait de travailler protège naturellement contre les maladies mentales",
+        "Que le respect des horaires favorise le respect du code pénal"
+      ],
+      correct: 1,
+      expl: "Dans <strong><em>Aurore</em></strong> (§173), <strong>Nietzsche</strong> dénonce la valorisation excessive du travail par l'État. Il affirme que le labeur épuisant maintient les individus sous un contrôle social invisible, car un homme fatigué par sa journée n'a plus l'énergie de contester ou de réfléchir."
+    },
+    {
+      q: "Quelle notion Émile Durkheim étudie-t-il pour expliquer l'organisation sociale moderne ?",
+      emoji: "🤝",
+      opts: [
+        "La division du travail social, créatrice de solidarité organique",
+        "La lutte des classes menant inévitablement à la révolution",
+        "La décadence des structures industrielles locales",
+        "L'isolement individuel dans les grandes usines"
+      ],
+      correct: 0,
+      expl: "Dans <em>De la division du travail social</em>, <strong>Durkheim</strong> soutient que la spécialisation moderne des fonctions économiques rapproche les hommes. Elle génère une <strong>solidarité organique</strong> (analogue aux organes dépendants les uns des autres), contrairement à la solidarité mécanique des sociétés traditionnelles."
+    }
+  ],
+  temps: [
+    {
+      q: "Quelle est la définition célèbre mais problématique du temps donnée par Saint Augustin ?",
+      emoji: "⏳",
+      opts: [
+        "Le temps est le mouvement de rotation des sphères célestes",
+        "Si personne ne me le demande, je le sais ; si je veux l'expliquer, je ne le sais plus",
+        "Le temps est une pure illusion d'optique provoquée par la lumière",
+        "Le temps correspond à l'accumulation de matière inerte dans l'univers"
+      ],
+      correct: 1,
+      expl: "Dans les <strong><em>Confessions</em></strong>, <strong>Saint Augustin</strong> soulève la difficulty de définir le temps. Pour lui, le passé n'existe plus, le futur n'est pas encore, et le présent s'évanouit aussitôt né. Le temps n'existe que dans la conscience sous forme de mémoire, d'attention et d'attente (<em>distensio animi</em>)."
+    },
+    {
+      q: "Comment Henri Bergson définit-il la « durée » en opposition au temps scientifique ?",
+      emoji: "⏱️",
+      opts: [
+        "Le temps tel qu'il s'affiche sur les cadrans de précision",
+        "Le temps de la conscience, indivisible, fluide et qualitatif",
+        "Le temps d'usure des métaux et des corps organiques",
+        "Le cycle infini de rotation de la Terre autour du Soleil"
+      ],
+      correct: 1,
+      expl: "Pour <strong>Bergson</strong>, la science fige et fragmente le temps en unités identiques (comme l'espace). Mais la <strong>durée vécue</strong> est un écoulement continu où nos états psychologiques se chevauchent et fusionnent sans se laisser diviser en minutes homogènes."
+    },
+    {
+      q: "Dans la pensée de Nietzsche, à quoi invite l'expérience de « l'éternel retour » ?",
+      emoji: "🔁",
+      opts: [
+        "À regretter infiniment chaque mauvaise décision prise",
+        "À vouloir vivre chaque moment de sa vie de sorte à pouvoir souhaiter le revivre éternellement",
+        "À adhérer à la théorie scientifique du Big Bounce",
+        "À croire en la réincarnation bouddhiste de l'âme"
+      ],
+      correct: 1,
+      expl: "L'éternel retour de <strong>Nietzsche</strong> est un exercice spirituel de haute exigence : si un démon te disait que tu revivras ta vie identique, avec ses douleurs et ses joies, à l'infini, serais-tu capable de dire 'Oui' ? C'est le sommet de l'<strong>amor fati</strong> (l'amour du destin)."
+    },
+    {
+      q: "Pourquoi Heidegger affirme-t-il que le Dasein (l'être de l'homme) est par essence temporel ?",
+      emoji: "💀",
+      opts: [
+        "Parce que l'homme a inventé la montre mécanique",
+        "Parce qu'il est un être jeté dans le monde dont l'existence est finie et tournée vers la mort",
+        "Car le corps humain grandit puis décline avec l'âge",
+        "Parce qu'il passe la majeure partie de sa journée à attendre"
+      ],
+      correct: 1,
+      expl: "Dans <strong><em>Être et Temps</em></strong>, <strong>Heidegger</strong> montre que l'homme est fondamentalement projeté vers l'avenir. Prendre conscience de son statut d'<strong>être-pour-la-mort</strong> force l'homme à sortir d'une temporalité banale pour faire des choix authentiques."
+    },
+    {
+      q: "Selon Blaise Pascal, comment l'homme évite-t-il de penser à l'écoulement tragique du temps ?",
+      emoji: "🎲",
+      opts: [
+        "En écrivant des livres de philosophie mathématique",
+        "Par le divertissement, qui le détourne de sa condition mortelle",
+        "En dormant le plus possible pour écourter ses journées",
+        "Grâce à la prière monacale rigoureuse de dix heures par jour"
+      ],
+      correct: 1,
+      expl: "Dans ses <strong><em>Pensées</em></strong>, <strong>Pascal</strong> démontre que l'homme est incapable de rester seul dans sa chambre sans s'ennuyer ou angoisser. Il s'agite et se jette dans des distractions (le jeu, la chasse, la guerre) pour fuir la conscience insupportable du temps qui le rapproche du trépas."
+    },
+    {
+      q: "Pour Emmanuel Kant, qu'est-ce que le temps ?",
+      emoji: "🕶️",
+      opts: [
+        "Un fluide invisible physique présent dans tout l'univers",
+        "Une forme a priori de notre sensibilité (un filtre de notre esprit)",
+        "Une illusion d'optique provoquée par la finitude du cerveau",
+        "Le mouvement nécessaire de la matière vers le désordre"
+      ],
+      correct: 1,
+      expl: "Pour <strong>Kant</strong> (<em>Critique de la raison pure</em>), le temps n'est pas une réalité physique existant hors de nous. C'est une structure subjective innée (une <strong>forme a priori de la sensibilité</strong>) à travers laquelle notre esprit appréhende et ordonne les perceptions."
+    },
+    {
+      q: "Quelle sagesse philosophique se cache derrière la maxime latine « Carpe Diem » ?",
+      emoji: "🌸",
+      opts: [
+        "Se concentrer sur le présent sans se laisser empoisonner par l'anxiété du futur",
+        "Ignorer les conséquences de ses actes et vivre sans morale",
+        "Étudier l'agriculture et planter des semences chaque matin",
+        "Accepter la fatalité absolue de sa mort"
+      ],
+      correct: 0,
+      expl: "Écrite par le poète latin <strong>Horace</strong>, cette maxime épicurienne signifie 'Cueille le jour présent'. Elle préconise de ne pas gâcher la seule réalité (l'instant présent) par des projections anxieuses sur un lendemain dont on n'a aucune garantie."
+    },
+    {
+      q: "Chez Marcel Proust, quel outil permet de vaincre la fuite destructrice du temps ?",
+      emoji: "🥐",
+      opts: [
+        "Une horloge d'une précision microscopique",
+        "La mémoire involontaire qui réactive le passé, fixée par l'écriture artistique",
+        "La méditation stoïcienne pratiquée de façon quotidienne",
+        "L'oubli complet des drames de l'enfance"
+      ],
+      correct: 1,
+      expl: "Dans <strong><em>À la recherche du temps perdu</em></strong>, la célèbre dégustation de la petite madeleine montre comment un élément sensoriel réactive tout un pan de vie enfoui. L'art littéraire permet ensuite de fixer cette résurrection de la mémoire pour échapper à la mort."
+    },
+    {
+      q: "Qu'est-ce que le 'Kaïros' chez les anciens Grecs par rapport au 'Chronos' ?",
+      emoji: "🏹",
+      opts: [
+        "Le temps de la cuisson des aliments",
+        "L'instant opportun, le moment critique et unique à saisir",
+        "La durée exacte d'une année lunaire",
+        "L'époque de la mythologie héroïque"
+      ],
+      correct: 1,
+      expl: "Alors que <em>Chronos</em> est le temps linéaire, physique et mesurable qui s'écoule inlassablement, le <strong>Kaïros</strong> est le concept temporel du **moment propice**, de l'opportunité à saisir au bon moment (ex. en stratégie militaire, en rhétorique ou en art)."
+    },
+    {
+      q: "Pour les Stoïciens, de quoi dépend notre rapport serein au futur ?",
+      emoji: "🛡️",
+      opts: [
+        "De notre capacité à accumuler suffisamment de richesses matérielles",
+        "De la distinction stricte entre ce qui dépend de nous et ce qui n'en dépend pas",
+        "De notre aptitude à prévoir les événements météorologiques",
+        "Du contrôle politique de notre cité d'habitation"
+      ],
+      correct: 1,
+      expl: "Selon <strong>Épictète</strong>, l'anxiété face au futur provient du fait qu'on veut contrôler les événements extérieurs. En acceptant le destin (ce qui ne dépend pas de nous) et en concentrant notre volonté sur nos réactions internes (ce qui dépend de nous), on accède à l'ataraxie (sérénité)."
+    }
+  ],
+  nature: [
+    {
+      q: "Comment Jean-Jacques Rousseau décrit-il l'homme à l'« état de nature » ?",
+      emoji: "🌿",
+      opts: [
+        "Comme une bête sanguinaire qui cherche à dévorer ses congénères",
+        "Comme un être solitaire, pacifique, doté d'amour de soi et de pitié",
+        "Comme un citoyen déjà habitué aux lois et à la propriété privée",
+        "Comme un être de raison pure lisant la nature comme un livre"
+      ],
+      correct: 1,
+      expl: "Dans son <em>Discours sur l'origine de l'inégalité</em>, <strong>Rousseau</strong> soutient que l'homme naturel n'est pas méchant. Il est guidé par l'instinct de conservation (amour de soi) mais tempéré par la <strong>pitié naturelle</strong> (le dégoût de voir souffrir autrui). C'est l'apparition de la propriété et de la vie sociale qui l'a corrompu."
+    },
+    {
+      q: "À quoi correspond la vie des hommes dans l'état de nature selon Thomas Hobbes ?",
+      emoji: "⚔️",
+      opts: [
+        "À un paradis terrestre de partage et d'abondance fruitière",
+        "À une guerre de tous contre tous où la vie est solitaire, misérable et brève",
+        "À une existence dominée par la sagesse des anciens druides",
+        "À un équilibre écologique parfait basé sur la cueillette collective"
+      ],
+      correct: 1,
+      expl: "Pour <strong>Hobbes</strong> (<em>Léviathan</em>), l'état de nature (sans lois ni police) libère la rivalité, la méfiance et la fierté humaine. 'L'homme est un loup pour l'homme'. C'est par peur d'une mort violente que les hommes fondent l'État civil via un contrat social."
+    },
+    {
+      q: "Pour René Descartes, quel statut l'être humain doit-il acquérir face à la nature ?",
+      emoji: "📐",
+      opts: [
+        "Un gardien soumis qui obéit pieusement aux lois sacrées de la biosphère",
+        "Se rendre 'comme maître et possesseur de la nature' via les sciences",
+        "Un observateur passif sans aucune intervention mécanique",
+        "Un élément biologique identique en tout point aux animaux"
+      ],
+      correct: 1,
+      expl: "Dans le <strong><em>Discours de la méthode</em></strong> (Partie VI), <strong>Descartes</strong> propose de rompre avec la philosophie purement spéculative de l'Antiquité. En concevant la nature comme une immense machine mathématique, l'homme peut l'analyser et la transformer par la technique pour son propre confort et sa santé."
+    },
+    {
+      q: "Qu'entend Spinoza par sa célèbre formule latine « Deus sive Natura » ?",
+      emoji: "🌌",
+      opts: [
+        "Dieu a créé la nature avant d'abandonner l'univers",
+        "Dieu ou la Nature (Dieu s'identifie à la Substance unique de l'univers)",
+        "La nature est l'ennemie de Dieu et de la morale humaine",
+        "La religion doit se calquer sur le mode de vie des animaux sauvages"
+      ],
+      correct: 1,
+      expl: "Dans son <em>Éthique</em>, <strong>Spinoza</strong> défend le panthéisme : il n'y a pas de Dieu créateur extérieur assis sur un nuage. Dieu est immanent au monde, il est l'univers lui-même en tant que Substance unique infinie dont les êtres physiques ne sont que des manifestations temporaires."
+    },
+    {
+      q: "Quelle différence Claude Lévi-Strauss propose-t-il pour séparer Nature et Culture ?",
+      emoji: "🌍",
+      opts: [
+        "La nature est verte, la culture est grise",
+        "La nature relève de l'universel (inné), la culture relève de la règle particulière (acquis)",
+        "La nature concerne la campagne, la culture appartient aux citadins",
+        "La nature s'étudie en biologie, la culture s'étudie en histoire uniquement"
+      ],
+      correct: 1,
+      expl: "Dans <em>Les Structures élémentaires de la parenté</em>, l'anthropologue <strong>Lévi-Strauss</strong> pose une règle méthodologique : tout ce qui est constant, inné et universel chez l'homme appartient à la nature. Tout ce qui présente des variations d'un groupe à un autre et obéit à des normes appartient à la culture."
+    },
+    {
+      q: "Quel devoir moral éthique Hans Jonas formule-t-il vis-à-vis de la nature ?",
+      emoji: "🌱",
+      opts: [
+        "Laisser la nature reprendre tous ses droits sur les villes d'ici un siècle",
+        "Le principe responsabilité : agir pour préserver la vie future sur Terre",
+        "Interdire toute recherche scientifique impliquant l'espace extra-terrestre",
+        "L'obligation pour chaque humain de cultiver son propre potager"
+      ],
+      correct: 1,
+      expl: "Dans <strong><em>Le Principe responsabilité</em></strong> (1979), <strong>Hans Jonas</strong> alerte sur la puissance destructrice inédite des technologies. Il formule un impératif : notre génération doit agir de sorte que les conditions de survie des générations futures et de la Terre ne soient pas compromises."
+    },
+    {
+      q: "Qu'est-ce que la notion de 'Physis' désignait chez les premiers penseurs présocratiques ?",
+      emoji: "🌊",
+      opts: [
+        "La force musculaire de l'athlète de la Grèce antique",
+        "Le principe actif de génération, de croissance et de changement du monde",
+        "Une substance magique conférant l'immortalité",
+        "Le livre contenant toutes les cartes géographiques connues"
+      ],
+      correct: 1,
+      expl: "Pour les <strong>Présocratiques</strong> (ex. Héraclite, Thalès), la <strong>physis</strong> n'est pas le décor extérieur inerte. C'est la force vivante interne qui anime le cosmos, le mouvement d'émergence par lequel chaque élément naît et se développe."
+    },
+    {
+      q: "Selon le mythe de Prométhée raconté par Platon, pourquoi l'homme a-t-il recours à la technique ?",
+      emoji: "🔥",
+      opts: [
+        "Par pur orgueil de surpasser le pouvoir du Dieu Zeus",
+        "Pour combler son indigence naturelle (l'oubli de son frère Épiméthée)",
+        "Car la nature lui fournissait trop de ressources gratuites",
+        "Pour pouvoir fabriquer des bijoux en métaux précieux"
+      ],
+      correct: 1,
+      expl: "Dans le <em>Protagoras</em>, <strong>Épiméthée</strong> distribue les attributs physiques (fourrure, griffes, ailes) aux animaux mais oublie l'homme, qui se retrouve nu et désarmé. Son frère <strong>Prométhée</strong> vole alors le feu et le savoir technique d'Héphaïstos et Athéna pour sauver l'espèce humaine."
+    },
+    {
+      q: "Quel paradoxe entoure le concept de 'Nature humaine' selon Jean-Paul Sartre ?",
+      emoji: "🎭",
+      opts: [
+        "Elle n'existe pas : l'existence précède l'essence (l'homme se définit par ses actes)",
+        "Elle est identique à celle des grands fauves de la savane",
+        "Elle est gravée dans l'ADN depuis le début de la création terrestre",
+        "Elle ne s'active que durant l'enfance"
+      ],
+      correct: 0,
+      expl: "Pour l'existentialisme de <strong>Sartre</strong>, l'homme n'a pas de nature prédéfinie ou de programme inné à accomplir. Il est d'abord libre et jeté au monde, et c'est par ses choix, ses actes et sa responsabilité qu'il dessine ce qu'il est. 'L'homme n'est rien d'autre que ce qu'il se fait'."
+    },
+    {
+      q: "Dans l'Antiquité, quelle école préconisait de « vivre conformément à la Nature » ?",
+      emoji: "🏛️",
+      opts: [
+        "Les Sophistes",
+        "Les Stoïciens",
+        "Les Platoniciens",
+        "Les Sceptiques"
+      ],
+      correct: 1,
+      expl: "Pour les **Stoïciens** (comme Sénèque, Marc Aurèle), l'univers est ordonné par une raison divine (le *Logos*). Vivre conformément à la nature, c'est utiliser notre raison humaine pour comprendre cet ordre rationnel cosmique et l'accepter sereinement."
+    }
+  ]
 };
 
-// ═══════════════════════════════════════════════════════════════
-// GAME STATE
-// ═══════════════════════════════════════════════════════════════
-let currentQuestions = [];
-let currentIndex = 0;
-let correctCount = 0;
-let answered = false;
-let userAnswers = []; // {qObj, selected, isCorrect}
+// ==================== AUDIO SYNTHESIZER (Pure JS) ====================
+// Generates fun feedback sounds without needing external audio files!
+const AudioSynth = {
+  ctx: null,
+  muted: false,
+  
+  init() {
+    if (this.ctx) return;
+    try {
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    } catch(e) {
+      console.warn("Web Audio Context not supported", e);
+    }
+  },
+  
+  toggle() {
+    this.muted = !this.muted;
+    const btn = document.getElementById('btn-sound');
+    btn.textContent = this.muted ? '🔇' : '🔊';
+    btn.classList.toggle('muted', this.muted);
+    
+    // Resume context if needed
+    if (!this.muted && this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
+    return this.muted;
+  },
+  
+  playTone(freq, type, duration, delay = 0) {
+    if (this.muted) return;
+    this.init();
+    if (!this.ctx) return;
+    
+    setTimeout(() => {
+      try {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+        
+        gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+        // smooth decay
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+        
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        
+        osc.start();
+        osc.stop(this.ctx.currentTime + duration);
+      } catch (e) {
+        console.error(e);
+      }
+    }, delay * 1000);
+  },
+  
+  playClick() {
+    this.playTone(350, 'sine', 0.1);
+  },
+  
+  playCorrect() {
+    this.playTone(523.25, 'triangle', 0.2); // C5
+    this.playTone(659.25, 'triangle', 0.3, 0.15); // E5
+  },
+  
+  playWrong() {
+    this.playTone(196.00, 'sawtooth', 0.2); // G3
+    this.playTone(174.61, 'sawtooth', 0.25, 0.12); // F3
+  },
+  
+  playSuccess() {
+    // Joyful arpeggio
+    this.playTone(523.25, 'sine', 0.2, 0); // C5
+    this.playTone(659.25, 'sine', 0.2, 0.1); // E5
+    this.playTone(783.99, 'sine', 0.2, 0.2); // G5
+    this.playTone(1046.50, 'sine', 0.4, 0.3); // C6
+  }
+};
 
-const screenHome    = document.getElementById('screen-home');
-const screenQuiz    = document.getElementById('screen-quiz');
+// Bind sound button
+document.getElementById('btn-sound').addEventListener('click', (e) => {
+  e.stopPropagation();
+  AudioSynth.toggle();
+});
+
+// ==================== CONFETTI ENGINE (Canvas-based) ====================
+const Confetti = {
+  canvas: document.getElementById('confetti-canvas'),
+  ctx: null,
+  active: false,
+  particles: [],
+  colors: ['#a78bfa', '#c77dff', '#60a5fa', '#34d399', '#f472b6', '#fbbf24'],
+  
+  init() {
+    this.ctx = this.canvas.getContext('2d');
+    this.resize();
+    window.addEventListener('resize', () => this.resize());
+  },
+  
+  resize() {
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+  },
+  
+  spawn(count) {
+    this.init();
+    this.particles = [];
+    this.active = true;
+    for (let i = 0; i < count; i++) {
+      this.particles.push({
+        x: Math.random() * this.canvas.width,
+        y: Math.random() * this.canvas.height - this.canvas.height,
+        r: Math.random() * 6 + 4,
+        d: Math.random() * this.canvas.height,
+        color: this.colors[Math.floor(Math.random() * this.colors.length)],
+        tilt: Math.random() * 10 - 5,
+        tiltAngleIncremental: Math.random() * 0.07 + 0.02,
+        tiltAngle: 0,
+        speedY: Math.random() * 3 + 2,
+        speedX: Math.random() * 2 - 1
+      });
+    }
+    this.animate();
+  },
+  
+  animate() {
+    if (!this.active) return;
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    
+    let alive = false;
+    for (let i = 0; i < this.particles.length; i++) {
+      const p = this.particles[i];
+      p.tiltAngle += p.tiltAngleIncremental;
+      p.y += p.speedY;
+      p.x += p.speedX;
+      p.tilt = Math.sin(p.tiltAngle) * 12;
+      
+      if (p.y < this.canvas.height + 20) {
+        alive = true;
+      }
+      
+      this.ctx.beginPath();
+      this.ctx.lineWidth = p.r / 2;
+      this.ctx.strokeStyle = p.color;
+      this.ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+      this.ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+      this.ctx.stroke();
+    }
+    
+    if (alive) {
+      requestAnimationFrame(() => this.animate());
+    } else {
+      this.active = false;
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+  },
+  
+  stop() {
+    this.active = false;
+    if(this.ctx) this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+};
+
+// ==================== APP LOGIC ====================
+let currentQuestions = [];
+let currentThemeKey = '';
+let currentIndex = 0;
+let score = 0;
+let userAnswers = [];
+let answerSelected = false;
+
+// DOM Elements
+const screenHome = document.getElementById('screen-home');
+const screenQuiz = document.getElementById('screen-quiz');
 const screenResults = document.getElementById('screen-results');
 
-function startTheme(key) {
-  if (key === 'all') {
-    currentQuestions = [...QUESTIONS.travail, ...QUESTIONS.temps, ...QUESTIONS.nature];
-  } else {
-    currentQuestions = [...QUESTIONS[key]];
-  }
-  // Shuffle
-  currentQuestions.sort(() => Math.random() - 0.5);
-  currentIndex = 0;
-  correctCount = 0;
-  userAnswers  = [];
-  answered     = false;
+const badgeTheme = document.getElementById('badge-theme');
+const scoreCounter = document.getElementById('score-counter');
+const questionIndexLabel = document.getElementById('question-index-label');
+const progressPercentage = document.getElementById('progress-percentage');
+const progressFill = document.getElementById('progress-fill');
 
+const questionEmoji = document.getElementById('question-emoji');
+const questionText = document.getElementById('question-text');
+const optionsGrid = document.getElementById('options-grid');
+
+const explanationBox = document.getElementById('explanation-box');
+const explanationText = document.getElementById('explanation-text');
+const btnNext = document.getElementById('btn-next');
+
+// Start Quiz
+function startQuiz(themeKey) {
+  AudioSynth.playClick();
+  currentThemeKey = themeKey;
+  
+  // Set theme class to body
+  document.body.className = '';
+  document.body.classList.add(`theme-${themeKey}`);
+  
+  // Prepare questions
+  if (themeKey === 'all') {
+    currentQuestions = [
+      ...QUESTION_BANK.travail, 
+      ...QUESTION_BANK.temps, 
+      ...QUESTION_BANK.nature
+    ];
+  } else {
+    currentQuestions = [...QUESTION_BANK[themeKey]];
+  }
+  
+  // Shuffle questions
+  currentQuestions.sort(() => Math.random() - 0.5);
+  
+  // Reset state
+  currentIndex = 0;
+  score = 0;
+  userAnswers = [];
+  
+  // Update view
   screenHome.classList.add('hide');
   screenResults.classList.add('hide');
   screenQuiz.classList.remove('hide');
+  
   renderQuestion();
 }
 
-function getThemeLabel(q) {
-  if (QUESTIONS.travail.includes(q)) return '⚒️ Le Travail';
-  if (QUESTIONS.temps.includes(q)) return '⏳ Le Temps';
-  if (QUESTIONS.nature.includes(q)) return '🌿 La Nature';
+function getThemeNiceName(q) {
+  if (QUESTION_BANK.travail.includes(q)) return '⚒️ Le Travail';
+  if (QUESTION_BANK.temps.includes(q)) return '⏳ Le Temps';
+  if (QUESTION_BANK.nature.includes(q)) return '🌿 La Nature';
   return '📚 Philo';
 }
 
+// Render one question
 function renderQuestion() {
+  answerSelected = false;
   const q = currentQuestions[currentIndex];
+  
+  // Hide next button & explanation box
+  btnNext.classList.add('hide');
+  explanationBox.classList.add('hide');
+  
+  // Meta metrics
   const total = currentQuestions.length;
-  answered = false;
-
-  document.getElementById('q-counter').textContent = `${currentIndex+1}/${total}`;
-  document.getElementById('progress-fill').style.width = `${((currentIndex+1)/total)*100}%`;
-  document.getElementById('score-label').textContent = `✅ ${correctCount}`;
-  document.getElementById('q-theme-tag').textContent = getThemeLabel(q);
-  document.getElementById('q-text').textContent = q.q;
-  document.getElementById('explanation-box').classList.add('hide');
-  document.getElementById('btn-next').classList.add('hide');
-
-  const letters = ['A','B','C','D'];
-  const container = document.getElementById('options-container');
-  container.innerHTML = '';
+  const indexDisplay = currentIndex + 1;
+  const pctVal = Math.round((currentIndex / total) * 100);
+  
+  badgeTheme.textContent = getThemeNiceName(q);
+  scoreCounter.textContent = score;
+  questionIndexLabel.textContent = `Question ${indexDisplay} sur ${total}`;
+  progressPercentage.textContent = `${pctVal}%`;
+  progressFill.style.width = `${pctVal}%`;
+  
+  // Details
+  questionEmoji.textContent = q.emoji || "💡";
+  questionText.textContent = q.q;
+  
+  // Render choices
+  optionsGrid.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
   q.opts.forEach((opt, i) => {
     const btn = document.createElement('button');
     btn.className = 'option-btn';
-    btn.innerHTML = `<span class="option-letter">${letters[i]}</span>${opt}`;
-    btn.addEventListener('click', () => selectAnswer(i));
-    container.appendChild(btn);
+    btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span class="option-text-span">${opt}</span>`;
+    btn.onclick = () => selectOption(i);
+    optionsGrid.appendChild(btn);
   });
-
-  // Re-animate card
+  
+  // Transition animations
   screenQuiz.style.animation = 'none';
   void screenQuiz.offsetWidth;
-  screenQuiz.style.animation = 'fadeIn .5s ease';
+  screenQuiz.style.animation = 'cardSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+  
+  // Dynamically move background glow orbs slightly for interactive environment feel
+  document.getElementById('orb-1').style.transform = `translate(${Math.random() * 80 - 40}px, ${Math.random() * 80 - 40}px) scale(1.05)`;
+  document.getElementById('orb-2').style.transform = `translate(${Math.random() * 80 - 40}px, ${Math.random() * 80 - 40}px) scale(0.95)`;
 }
 
-function selectAnswer(idx) {
-  if (answered) return;
-  answered = true;
-
+// Select an option
+function selectOption(selectedIndex) {
+  if (answerSelected) return;
+  answerSelected = true;
+  
   const q = currentQuestions[currentIndex];
-  const buttons = document.querySelectorAll('.option-btn');
-  const isCorrect = idx === q.correct;
-
-  if (isCorrect) correctCount++;
-
-  userAnswers.push({ qObj: q, selected: idx, isCorrect });
-
-  // Visual feedback
-  buttons.forEach((btn, i) => {
-    btn.classList.add('disabled');
-    if (i === q.correct) btn.classList.add('correct');
-    if (i === idx && !isCorrect) btn.classList.add('wrong');
+  const buttons = optionsGrid.querySelectorAll('.option-btn');
+  const isCorrect = (selectedIndex === q.correct);
+  
+  // Track answer
+  userAnswers.push({
+    q: q.q,
+    opts: q.opts,
+    selected: selectedIndex,
+    correct: q.correct,
+    isCorrect: isCorrect
   });
-
-  // Show explanation
-  document.getElementById('expl-text').innerHTML = q.expl;
-  document.getElementById('explanation-box').classList.remove('hide');
-
-  // Show next button
-  const btnNext = document.getElementById('btn-next');
-  btnNext.classList.remove('hide');
-  btnNext.textContent = (currentIndex === currentQuestions.length - 1) ? 'Voir les résultats 🏆' : 'Suivant ➡️';
-
-  // Update score
-  document.getElementById('score-label').textContent = `✅ ${correctCount}`;
-}
-
-function nextQuestion() {
-  currentIndex++;
-  if (currentIndex >= currentQuestions.length) {
-    showResults();
+  
+  if (isCorrect) {
+    score++;
+    AudioSynth.playTone(523.25, 'triangle', 0.2); // play sound
+    AudioSynth.playTone(659.25, 'triangle', 0.3, 0.15);
+    buttons[selectedIndex].classList.add('correct');
   } else {
-    renderQuestion();
-    window.scrollTo({top:0, behavior:'smooth'});
+    AudioSynth.playTone(196.00, 'sawtooth', 0.2);
+    AudioSynth.playTone(174.61, 'sawtooth', 0.25, 0.12);
+    buttons[selectedIndex].classList.add('wrong');
+    buttons[q.correct].classList.add('correct');
+  }
+  
+  // Update score label instantly
+  scoreCounter.textContent = score;
+  
+  // Disable all other buttons visually
+  buttons.forEach(btn => btn.classList.add('disabled'));
+  
+  // Display Explanation Card
+  explanationText.innerHTML = q.expl;
+  explanationBox.classList.remove('hide');
+  
+  // Prepare next CTA
+  btnNext.classList.remove('hide');
+  if (currentIndex === currentQuestions.length - 1) {
+    btnNext.textContent = 'Voir mes résultats 🏆';
+  } else {
+    btnNext.textContent = 'Question suivante ➡️';
   }
 }
 
+// Handle transition
+function handleNext() {
+  AudioSynth.playTone(350, 'sine', 0.1);
+  currentIndex++;
+  if (currentIndex < currentQuestions.length) {
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+// Show final screen
 function showResults() {
   screenQuiz.classList.add('hide');
   screenResults.classList.remove('hide');
-
+  
+  // Stop any ongoing confetti
+  Confetti.stop();
+  
   const total = currentQuestions.length;
-  const pct = Math.round((correctCount / total) * 100);
-
-  document.getElementById('r-score').textContent = correctCount;
-  document.getElementById('r-total').textContent = `/ ${total}`;
-
-  let msg = '';
-  if (pct === 100)     msg = 'Parfait ! Tu es prêt(e) pour le bac ! 🎉';
-  else if (pct >= 80)  msg = 'Excellent ! Tu maîtrises bien ces notions 💪';
-  else if (pct >= 60)  msg = 'Bien joué ! Encore un peu de révision et ce sera parfait 📖';
-  else if (pct >= 40)  msg = 'Pas mal, mais il faut approfondir certaines notions 📚';
-  else                 msg = 'Il faut réviser davantage ! Relis tes cours et recommence 💡';
-  document.getElementById('r-msg').textContent = msg;
-
-  // Details
-  const detailsDiv = document.getElementById('r-details');
-  detailsDiv.innerHTML = '';
-  userAnswers.forEach((a) => {
+  document.getElementById('result-score').textContent = score;
+  document.getElementById('result-total').textContent = `/ ${total}`;
+  
+  const pct = Math.round((score / total) * 100);
+  
+  // Update Conic Gradient on Dial
+  const scorePie = document.getElementById('score-pie');
+  scorePie.style.background = `conic-gradient(var(--accent) ${pct}%, rgba(255, 255, 255, 0.05) ${pct}%)`;
+  
+  // Setup nice message & motivational philosophy quote
+  let verdict = '';
+  let quote = '';
+  
+  if (pct === 100) {
+    verdict = "卓越 — Excellence Absolue ! 👑";
+    quote = "Le bonheur est une activité de l'âme conforme à la vertu. — Aristote";
+    Confetti.spawn(180);
+    AudioSynth.playSuccess();
+  } else if (pct >= 80) {
+    verdict = "Félicitations ! 🎉";
+    quote = "Ce que l'homme perd par le contrat social, c'est sa liberté naturelle ; ce qu'il gagne, c'est la liberté civile. — Rousseau";
+    Confetti.spawn(120);
+    AudioSynth.playSuccess();
+  } else if (pct >= 60) {
+    verdict = "Très Encourageant ! 👍";
+    quote = "Le temps est ce que nous voulons le plus, mais ce que nous utilisons le pire. — William Penn";
+    Confetti.spawn(60);
+    AudioSynth.playSuccess();
+  } else if (pct >= 40) {
+    verdict = "Moyen, persévère ! 📚";
+    quote = "Il n'y a pas de liberté là où les lois dépendent de la volonté d'un seul. — Condorcet";
+  } else {
+    verdict = "À retravailler d'urgence ! 📖";
+    quote = "Penser, c'est dire non. — Alain";
+  }
+  
+  document.getElementById('result-verdict').textContent = verdict;
+  document.getElementById('result-quote').textContent = quote;
+  
+  // Build detailed review grid
+  const reviewContainer = document.getElementById('results-review');
+  reviewContainer.innerHTML = '';
+  
+  userAnswers.forEach((ans, index) => {
     const item = document.createElement('div');
-    item.className = 'result-item';
-    const icon = a.isCorrect ? '✅' : '❌';
-    const letters = ['A','B','C','D'];
-    let html = `<span class="result-icon">${icon}</span>`;
-    html += `<div class="result-q"><strong>${a.qObj.q}</strong><br>`;
-    if (!a.isCorrect) {
-      html += `Ta réponse : ${letters[a.selected]}. ${a.qObj.opts[a.selected]}<br>`;
+    item.className = 'review-item';
+    
+    const icon = ans.isCorrect ? '✅' : '❌';
+    const letters = ['A', 'B', 'C', 'D'];
+    
+    let answerMarkup = '';
+    if (ans.isCorrect) {
+      answerMarkup = `<span class="ok">Réponse correcte : ${letters[ans.correct]}. ${ans.opts[ans.correct]}</span>`;
+    } else {
+      answerMarkup = `<span class="nok">Ta réponse : ${letters[ans.selected]}. ${ans.opts[ans.selected]}</span><br>` +
+                     `<span class="ok">Bonne réponse : ${letters[ans.correct]}. ${ans.opts[ans.correct]}</span>`;
     }
-    html += `Bonne réponse : ${letters[a.qObj.correct]}. ${a.qObj.opts[a.qObj.correct]}</div>`;
-    item.innerHTML = html;
-    detailsDiv.appendChild(item);
+    
+    item.innerHTML = `
+      <div class="review-status">${icon}</div>
+      <div class="review-content">
+        <div class="q">Q${index+1}: ${ans.q}</div>
+        <div class="ans">${answerMarkup}</div>
+      </div>
+    `;
+    reviewContainer.appendChild(item);
   });
+  
+  // Update restart CTA button label
+  document.getElementById('btn-restart-theme').textContent = `Recommencer (${currentThemeKey === 'all' ? 'Mélange' : getThemeNiceName(currentQuestions[0]).split(' ').slice(1).join(' ')})`;
+}
 
-  window.scrollTo({top:0, behavior:'smooth'});
+// Restart current
+function restartCurrentQuiz() {
+  startQuiz(currentThemeKey);
+}
+
+// Reset app
+function resetQuiz() {
+  AudioSynth.playTone(350, 'sine', 0.1);
+  Confetti.stop();
+  document.body.className = '';
+  screenResults.classList.add('hide');
+  screenQuiz.classList.add('hide');
+  screenHome.classList.remove('hide');
 }
 </script>
 </body>
