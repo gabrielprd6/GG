@@ -280,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
         summaryMovie.innerText = movieVal;
 
         // Configure pre-filled email mailto link
-        const emailAddress = 'gabin.nyons@gmail.com';
+        const emailAddress = 'gabi.nyons@gmail.com';
         const emailSubject = 'Planification de notre date romantique ! ❤️';
         const emailBody = `Coucou !\n\nVoici le programme choisi pour notre date de retrouvailles :\n\n🍴 Plat choisi : ${foodVal}\n🎬 Programme cinéma : ${movieVal}\n\nJ'ai tellement hâte de te retrouver, ça va être incroyable. 🥰`;
         
